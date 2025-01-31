@@ -71,6 +71,16 @@ function getPlanIdentifier(planField: any): { numericId?: number } | null {
   ) {
     return { numericId: planField.set[0].id };
   }
+  
+  // CASO 3: Desde la UI de Strapi con { connect: [ { id: number } ] }
+  if (
+    typeof planField === "object" &&
+    Array.isArray(planField.connect) &&
+    planField.connect.length > 0 &&
+    planField.connect[0]?.id
+  ) {
+    return { numericId: planField.connect[0].id };
+  }
 
   // Si no usas "documentId" en el Plan, puedes omitir la lógica de docId
   // y devolver null en cualquier otro caso.
