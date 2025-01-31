@@ -1,0 +1,52 @@
+{
+  "kind": "singleType",
+  "collectionName": "nosotros",
+  "info": {
+    "singularName": "nosotro",
+    "pluralName": "nosotros",
+    "displayName": "Nosotros",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "timeline": {
+      "type": "component",
+      "repeatable": true,
+      "component": "timeline.timeline-element"
+    },
+    "viticultura": {
+      "type": "component",
+      "repeatable": true,
+      "component": "viticultura.viticultura-element"
+    },
+    "filantropia": {
+      "type": "component",
+      "repeatable": true,
+      "component": "filantropia.filantropia-element"
+    },
+    "slider": {
+      "type": "component",
+      "repeatable": true,
+      "component": "slider.slider-element"
+    },
+    "cover": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": true
+    }
+  }
+}

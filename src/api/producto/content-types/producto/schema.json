@@ -1,0 +1,112 @@
+{
+  "kind": "collectionType",
+  "collectionName": "productos",
+  "info": {
+    "singularName": "producto",
+    "pluralName": "productos",
+    "displayName": "Productos",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title",
+      "required": true
+    },
+    "regularPrice": {
+      "type": "integer",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "sku": {
+      "type": "uid"
+    },
+    "order": {
+      "type": "integer"
+    },
+    "productInHome": {
+      "type": "boolean"
+    },
+    "categorias_de_producto": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::product-category.product-category",
+      "inversedBy": "productos"
+    },
+    "description": {
+      "type": "richtext",
+      "required": true
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    },
+    "isVariable": {
+      "type": "boolean",
+      "default": false
+    },
+    "price": {
+      "type": "integer"
+    },
+    "variaciones": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::variacion.variacion",
+      "mappedBy": "productos"
+    },
+    "wineCepa": {
+      "type": "enumeration",
+      "enum": [
+        "No Aplica",
+        "Cabernet",
+        "Chardonnay",
+        "Malbec",
+        "Merlot",
+        "Syrah",
+        "Pinot Noir"
+      ],
+      "default": "No Aplica",
+      "required": true
+    },
+    "wineColor": {
+      "type": "enumeration",
+      "enum": [
+        "No Aplica",
+        "Tinto",
+        "Blanco",
+        "Rosado"
+      ],
+      "default": "No Aplica",
+      "required": true
+    },
+    "pedidos": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::pedido.pedido",
+      "mappedBy": "productos"
+    }
+  }
+}

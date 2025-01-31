@@ -1,0 +1,108 @@
+{
+  "kind": "collectionType",
+  "collectionName": "reservas",
+  "info": {
+    "singularName": "reserva",
+    "pluralName": "reservas",
+    "displayName": "Reservas",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "reservationDate": {
+      "type": "date",
+      "required": true
+    },
+    "plan": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::plan.plan",
+      "inversedBy": "reservas"
+    },
+    "reservationTime": {
+      "type": "time",
+      "required": true
+    },
+    "guests": {
+      "type": "integer",
+      "required": true
+    },
+    "state": {
+      "type": "enumeration",
+      "enum": [
+        "Pendiente",
+        "Confirmada",
+        "Cancelada",
+        "Pago"
+      ]
+    },
+    "customerName": {
+      "type": "string",
+      "required": true
+    },
+    "customerMiddleName": {
+      "type": "string"
+    },
+    "customerLastname": {
+      "type": "string",
+      "required": true
+    },
+    "customerSecondLastname": {
+      "type": "string"
+    },
+    "customerDocument": {
+      "type": "string",
+      "required": true
+    },
+    "customerEmail": {
+      "type": "email",
+      "required": true
+    },
+    "customerPhone": {
+      "type": "string"
+    },
+    "creationDate": {
+      "type": "datetime"
+    },
+    "customerIpAddress": {
+      "type": "string"
+    },
+    "totalPriceReservation": {
+      "type": "integer"
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "reservas"
+    },
+    "reservationNumber": {
+      "type": "string",
+      "unique": true
+    },
+    "user_agent": {
+      "type": "string"
+    },
+    "servicios_adicionales": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::additional-service.additional-service",
+      "inversedBy": "reservas"
+    },
+    "check_in_status": {
+      "type": "boolean"
+    },
+    "payment_status": {
+      "type": "enumeration",
+      "enum": [
+        "Pendiente",
+        "Pago",
+        "Fallido",
+        "approved"
+      ]
+    }
+  }
+}

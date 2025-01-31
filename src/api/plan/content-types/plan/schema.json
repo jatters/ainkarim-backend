@@ -1,0 +1,96 @@
+{
+  "kind": "collectionType",
+  "collectionName": "planes",
+  "info": {
+    "singularName": "plan",
+    "pluralName": "planes",
+    "displayName": "Planes",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "richtext"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ]
+    },
+    "price": {
+      "type": "integer"
+    },
+    "duration": {
+      "type": "integer"
+    },
+    "max_reservations": {
+      "type": "integer"
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "onlyAdults": {
+      "type": "boolean"
+    },
+    "allowChilds": {
+      "type": "boolean"
+    },
+    "order": {
+      "type": "integer"
+    },
+    "servicios_adicionales": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::additional-service.additional-service",
+      "inversedBy": "planes"
+    },
+    "experiencias": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::experiencia.experiencia",
+      "inversedBy": "planes"
+    },
+    "horarios": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::horario.horario",
+      "mappedBy": "planes"
+    },
+    "reservas": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::reserva.reserva",
+      "mappedBy": "plan"
+    },
+    "reglas_planes": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::regla-plan.regla-plan",
+      "mappedBy": "plans"
+    }
+  }
+}

@@ -1,0 +1,49 @@
+{
+  "kind": "collectionType",
+  "collectionName": "correos",
+  "info": {
+    "singularName": "correo",
+    "pluralName": "correos",
+    "displayName": "Correos",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "formName": {
+      "type": "string"
+    },
+    "date": {
+      "type": "datetime"
+    },
+    "uuid": {
+      "type": "uid"
+    },
+    "ipAddress": {
+      "type": "string"
+    },
+    "message": {
+      "type": "text"
+    },
+    "fromMail": {
+      "type": "email"
+    },
+    "phone": {
+      "type": "biginteger"
+    },
+    "allowresponse": {
+      "type": "boolean"
+    },
+    "allowMarketing": {
+      "type": "boolean"
+    },
+    "user_agent": {
+      "type": "text"
+    },
+    "userName": {
+      "type": "string"
+    }
+  }
+}

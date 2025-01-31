@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "additional_services",
+  "info": {
+    "singularName": "additional-service",
+    "pluralName": "additional-services",
+    "displayName": "Servicios Adicionales"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "price": {
+      "type": "integer"
+    },
+    "icon": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos",
+        "audios"
+      ],
+      "type": "media",
+      "multiple": false
+    },
+    "description": {
+      "type": "blocks"
+    },
+    "planes": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::plan.plan",
+      "mappedBy": "servicios_adicionales"
+    },
+    "reservas": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::reserva.reserva",
+      "mappedBy": "servicios_adicionales"
+    }
+  }
+}

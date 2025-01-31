@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_viticultura_viticultura_elements",
+  "info": {
+    "displayName": "Viticultura Element"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false,
+      "required": true
+    },
+    "description": {
+      "type": "richtext",
+      "required": true
+    }
+  }
+}

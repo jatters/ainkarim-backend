@@ -1,0 +1,43 @@
+{
+  "kind": "singleType",
+  "collectionName": "popups",
+  "info": {
+    "singularName": "popup",
+    "pluralName": "popups",
+    "displayName": "Popup",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "startDate": {
+      "type": "datetime"
+    },
+    "endDate": {
+      "type": "datetime"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "isActive": {
+      "type": "boolean"
+    },
+    "visibleInHome": {
+      "type": "boolean",
+      "default": false
+    },
+    "visibleInStore": {
+      "type": "boolean"
+    },
+    "visibleInPlans": {
+      "type": "boolean"
+    }
+  }
+}

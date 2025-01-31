@@ -1,0 +1,112 @@
+{
+  "kind": "collectionType",
+  "collectionName": "pedidos",
+  "info": {
+    "singularName": "pedido",
+    "pluralName": "pedidos",
+    "displayName": "Pedidos",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "creationDate": {
+      "type": "datetime",
+      "required": false
+    },
+    "state": {
+      "type": "enumeration",
+      "enum": [
+        "Pendiente",
+        "Procesando",
+        "En espera",
+        "Completado",
+        "Cancelado",
+        "Reembolsado",
+        "Fallido",
+        "Borrador",
+        "Pago"
+      ],
+      "required": true,
+      "default": "Borrador"
+    },
+    "customerName": {
+      "type": "string",
+      "required": true
+    },
+    "customerLastname": {
+      "type": "string",
+      "required": true
+    },
+    "customerEmail": {
+      "type": "email",
+      "required": true
+    },
+    "customerPhone": {
+      "type": "string"
+    },
+    "customerDocument": {
+      "type": "string",
+      "required": true
+    },
+    "customerMiddleName": {
+      "type": "string"
+    },
+    "customerSecondLastname": {
+      "type": "string"
+    },
+    "customerAddress": {
+      "type": "string"
+    },
+    "customerDeparment": {
+      "type": "string"
+    },
+    "totalPriceOrder": {
+      "type": "integer"
+    },
+    "customerIpAddress": {
+      "type": "string"
+    },
+    "numberOrder": {
+      "type": "string",
+      "unique": true
+    },
+    "users_permissions_user": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "plugin::users-permissions.user",
+      "inversedBy": "pedidos"
+    },
+    "user_agent": {
+      "type": "string"
+    },
+    "productos": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::producto.producto",
+      "inversedBy": "pedidos"
+    },
+    "items": {
+      "type": "json"
+    },
+    "payment_status": {
+      "type": "enumeration",
+      "enum": [
+        "Pendiente",
+        "Pago",
+        "Fallido",
+        "approved",
+        "in_process",
+        "rejected"
+      ]
+    },
+    "payment_id": {
+      "type": "string"
+    },
+    "payment_method": {
+      "type": "string"
+    }
+  }
+}
