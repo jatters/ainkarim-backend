@@ -94,6 +94,10 @@ async function validateReserva(event: any) {
   const { data } = event.params;
   if (!data) return;
 
+  if (!data.plan) {
+    return; 
+  }
+
   // 1) Extraer identificador numérico del plan
   const planIdObj = getPlanIdentifier(data.plan);
   if (!planIdObj || !planIdObj.numericId) {
@@ -204,7 +208,7 @@ export default {
 
     // (Opcional) Generar consecutivo "reservationNumber" si no existe
     const { data } = event.params;
-    if (!data.reservationNumber) {
+    /* if (!data.reservationNumber) {
       // Ejemplo: "RES-0001"
       const [last] = await strapi.db.query('api::reserva.reserva').findMany({
         orderBy: { reservationNumber: 'desc' },
@@ -221,7 +225,7 @@ export default {
         }
       }
       data.reservationNumber = `RES-${String(nextNum).padStart(4, '0')}`;
-    }
+    } */
     data.creationDate = new Date();
 
   },

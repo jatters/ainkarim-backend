@@ -103,6 +103,21 @@
         "Fallido",
         "approved"
       ]
+    },
+    "payment_id": {
+      "type": "string"
+    },
+    "payment_method": {
+      "type": "string"
+    },
+    "customerDocumentType": {
+      "type": "enumeration",
+      "enum": [
+        "Cédula",
+        "Cédula de extranjería",
+        "NIT",
+        "Pasaporte"
+      ]
     }
   }
 }

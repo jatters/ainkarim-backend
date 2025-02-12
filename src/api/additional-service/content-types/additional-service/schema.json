@@ -4,7 +4,8 @@
   "info": {
     "singularName": "additional-service",
     "pluralName": "additional-services",
-    "displayName": "Servicios Adicionales"
+    "displayName": "Servicios Adicionales",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -12,23 +13,20 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "price": {
-      "type": "integer"
+      "type": "integer",
+      "required": true
     },
     "icon": {
-      "allowedTypes": [
-        "images",
-        "files",
-        "videos",
-        "audios"
-      ],
       "type": "media",
-      "multiple": false
-    },
-    "description": {
-      "type": "blocks"
+      "multiple": false,
+      "required": true,
+      "allowedTypes": [
+        "images"
+      ]
     },
     "planes": {
       "type": "relation",

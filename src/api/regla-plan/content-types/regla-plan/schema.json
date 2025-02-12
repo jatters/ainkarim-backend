@@ -17,7 +17,9 @@
       "required": true
     },
     "isRangeData": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false,
+      "required": true
     },
     "rangeDateFrom": {
       "type": "datetime"
@@ -26,7 +28,9 @@
       "type": "datetime"
     },
     "isRangeHour": {
-      "type": "boolean"
+      "type": "boolean",
+      "required": true,
+      "default": false
     },
     "rangeHourFrom": {
       "type": "time"
@@ -35,7 +39,9 @@
       "type": "time"
     },
     "isDayRestric": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false,
+      "required": true
     },
     "day": {
       "type": "enumeration",

@@ -373,6 +373,7 @@ export interface ApiAdditionalServiceAdditionalService
   extends Struct.CollectionTypeSchema {
   collectionName: 'additional_services';
   info: {
+    description: '';
     displayName: 'Servicios Adicionales';
     pluralName: 'additional-services';
     singularName: 'additional-service';
@@ -384,17 +385,16 @@ export interface ApiAdditionalServiceAdditionalService
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.Blocks;
-    icon: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    icon: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::additional-service.additional-service'
     > &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
     planes: Schema.Attribute.Relation<'manyToMany', 'api::plan.plan'>;
-    price: Schema.Attribute.Integer;
+    price: Schema.Attribute.Integer & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     reservas: Schema.Attribute.Relation<'manyToMany', 'api::reserva.reserva'>;
     updatedAt: Schema.Attribute.DateTime;
@@ -458,14 +458,14 @@ export interface ApiExperienciaExperiencia extends Struct.CollectionTypeSchema {
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     description: Schema.Attribute.Text;
-    icon: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    icon: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::experiencia.experiencia'
     > &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
     planes: Schema.Attribute.Relation<'manyToMany', 'api::plan.plan'>;
     publishedAt: Schema.Attribute.DateTime;
     updatedAt: Schema.Attribute.DateTime;
@@ -477,6 +477,7 @@ export interface ApiExperienciaExperiencia extends Struct.CollectionTypeSchema {
 export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
   collectionName: 'faqs';
   info: {
+    description: '';
     displayName: 'FAQ';
     pluralName: 'faqs';
     singularName: 'faq';
@@ -485,7 +486,7 @@ export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    content: Schema.Attribute.Text;
+    content: Schema.Attribute.Text & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -493,7 +494,7 @@ export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::faq.faq'> &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    title: Schema.Attribute.String;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -515,17 +516,17 @@ export interface ApiHorarioHorario extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    endTime: Schema.Attribute.Time;
+    endTime: Schema.Attribute.Time & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::horario.horario'
     > &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
     planes: Schema.Attribute.Relation<'manyToMany', 'api::plan.plan'>;
     publishedAt: Schema.Attribute.DateTime;
-    startTime: Schema.Attribute.Time;
+    startTime: Schema.Attribute.Time & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -592,6 +593,9 @@ export interface ApiPedidoPedido extends Struct.CollectionTypeSchema {
     customerAddress: Schema.Attribute.String;
     customerDeparment: Schema.Attribute.String;
     customerDocument: Schema.Attribute.String & Schema.Attribute.Required;
+    customerDocumentType: Schema.Attribute.Enumeration<
+      ['C\u00E9dula', 'C\u00E9dula de extranjer\u00EDa', 'NIT', 'Pasaporte']
+    >;
     customerEmail: Schema.Attribute.Email & Schema.Attribute.Required;
     customerIpAddress: Schema.Attribute.String;
     customerLastname: Schema.Attribute.String & Schema.Attribute.Required;
@@ -656,7 +660,9 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
     draftAndPublish: true;
   };
   attributes: {
-    allowChilds: Schema.Attribute.Boolean;
+    allowChilds: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -666,20 +672,20 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
       'manyToMany',
       'api::experiencia.experiencia'
     >;
-    gallery: Schema.Attribute.Media<
-      'images' | 'files' | 'videos' | 'audios',
-      true
-    >;
+    gallery: Schema.Attribute.Media<'images', true>;
     horarios: Schema.Attribute.Relation<'manyToMany', 'api::horario.horario'>;
-    image: Schema.Attribute.Media<'images' | 'files' | 'videos' | 'audios'>;
+    image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'> &
       Schema.Attribute.Private;
-    max_reservations: Schema.Attribute.Integer;
-    name: Schema.Attribute.String;
-    onlyAdults: Schema.Attribute.Boolean;
+    max_reservations: Schema.Attribute.Integer & Schema.Attribute.Required;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    onlyAdults: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     order: Schema.Attribute.Integer;
-    price: Schema.Attribute.Integer;
+    planDescription: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    price: Schema.Attribute.Integer & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
     reglas_planes: Schema.Attribute.Relation<
       'manyToMany',
@@ -690,7 +696,8 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
       'manyToMany',
       'api::additional-service.additional-service'
     >;
-    slug: Schema.Attribute.UID<'name'>;
+    showInHome: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -733,6 +740,7 @@ export interface ApiProductCategoryProductCategory
   extends Struct.CollectionTypeSchema {
   collectionName: 'productcategories';
   info: {
+    description: '';
     displayName: 'Categorias de producto';
     pluralName: 'productcategories';
     singularName: 'product-category';
@@ -751,10 +759,10 @@ export interface ApiProductCategoryProductCategory
       'api::product-category.product-category'
     > &
       Schema.Attribute.Private;
-    name: Schema.Attribute.String;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
     productos: Schema.Attribute.Relation<'oneToMany', 'api::producto.producto'>;
     publishedAt: Schema.Attribute.DateTime;
-    slug: Schema.Attribute.UID<'name'>;
+    slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -780,10 +788,11 @@ export interface ApiProductoProducto extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.RichText & Schema.Attribute.Required;
     gallery: Schema.Attribute.Media<'images', true>;
     image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
-    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
+    isActive: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
     isVariable: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -794,7 +803,8 @@ export interface ApiProductoProducto extends Struct.CollectionTypeSchema {
     order: Schema.Attribute.Integer;
     pedidos: Schema.Attribute.Relation<'manyToMany', 'api::pedido.pedido'>;
     price: Schema.Attribute.Integer;
-    productInHome: Schema.Attribute.Boolean;
+    productDescription: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    productInHome: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     publishedAt: Schema.Attribute.DateTime;
     regularPrice: Schema.Attribute.Integer & Schema.Attribute.Required;
     sku: Schema.Attribute.UID;
@@ -846,9 +856,15 @@ export interface ApiReglaPlanReglaPlan extends Struct.CollectionTypeSchema {
     day: Schema.Attribute.Enumeration<
       ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
     >;
-    isDayRestric: Schema.Attribute.Boolean;
-    isRangeData: Schema.Attribute.Boolean;
-    isRangeHour: Schema.Attribute.Boolean;
+    isDayRestric: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    isRangeData: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    isRangeHour: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -886,6 +902,9 @@ export interface ApiReservaReserva extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     creationDate: Schema.Attribute.DateTime;
     customerDocument: Schema.Attribute.String & Schema.Attribute.Required;
+    customerDocumentType: Schema.Attribute.Enumeration<
+      ['C\u00E9dula', 'C\u00E9dula de extranjer\u00EDa', 'NIT', 'Pasaporte']
+    >;
     customerEmail: Schema.Attribute.Email & Schema.Attribute.Required;
     customerIpAddress: Schema.Attribute.String;
     customerLastname: Schema.Attribute.String & Schema.Attribute.Required;
@@ -900,6 +919,8 @@ export interface ApiReservaReserva extends Struct.CollectionTypeSchema {
       'api::reserva.reserva'
     > &
       Schema.Attribute.Private;
+    payment_id: Schema.Attribute.String;
+    payment_method: Schema.Attribute.String;
     payment_status: Schema.Attribute.Enumeration<
       ['Pendiente', 'Pago', 'Fallido', 'approved']
     >;
@@ -1426,7 +1447,10 @@ export interface PluginUsersPermissionsUser
   };
   attributes: {
     address: Schema.Attribute.String;
+    allowMarketing: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
+    bornDate: Schema.Attribute.Date;
     city: Schema.Attribute.String;
     confirmationToken: Schema.Attribute.String & Schema.Attribute.Private;
     confirmed: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
@@ -1435,12 +1459,17 @@ export interface PluginUsersPermissionsUser
       Schema.Attribute.Private;
     department: Schema.Attribute.String;
     document: Schema.Attribute.String;
+    documentType: Schema.Attribute.Enumeration<
+      ['C\u00E9dula', 'C\u00E9dula de extranjer\u00EDa', 'Pasaporte', 'NIT']
+    > &
+      Schema.Attribute.Required;
     email: Schema.Attribute.Email &
       Schema.Attribute.Required &
       Schema.Attribute.SetMinMaxLength<{
         minLength: 6;
       }>;
     firstName: Schema.Attribute.String;
+    gender: Schema.Attribute.Enumeration<['Masculino', 'Femenino', 'Otro']>;
     lastName: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -1449,7 +1478,7 @@ export interface PluginUsersPermissionsUser
     > &
       Schema.Attribute.Private;
     middleName: Schema.Attribute.String;
-    mobile: Schema.Attribute.Integer;
+    mobile: Schema.Attribute.BigInteger;
     password: Schema.Attribute.Password &
       Schema.Attribute.Private &
       Schema.Attribute.SetMinMaxLength<{

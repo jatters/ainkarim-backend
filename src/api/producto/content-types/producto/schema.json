@@ -48,7 +48,8 @@
       "type": "integer"
     },
     "productInHome": {
-      "type": "boolean"
+      "type": "boolean",
+      "default": false
     },
     "categorias_de_producto": {
       "type": "relation",
@@ -56,13 +57,10 @@
       "target": "api::product-category.product-category",
       "inversedBy": "productos"
     },
-    "description": {
-      "type": "richtext",
-      "required": true
-    },
     "isActive": {
       "type": "boolean",
-      "default": true
+      "default": true,
+      "required": true
     },
     "isVariable": {
       "type": "boolean",
@@ -107,6 +105,10 @@
       "relation": "manyToMany",
       "target": "api::pedido.pedido",
       "mappedBy": "productos"
+    },
+    "productDescription": {
+      "type": "blocks",
+      "required": true
     }
   }
 }

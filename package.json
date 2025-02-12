@@ -2,7 +2,7 @@
   "name": "ainkarim-backend",
   "version": "0.1.0",
   "private": true,
-  "description": "A Strapi application",
+  "description": "Ainkarim Manager",
   "scripts": {
     "build": "strapi build",
     "deploy": "strapi deploy",
@@ -17,6 +17,7 @@
     "@mui/material": "^6.4.1",
     "@strapi/plugin-cloud": "5.9.0",
     "@strapi/plugin-users-permissions": "5.9.0",
+    "@strapi/provider-email-sendgrid": "^5.9.0",
     "@strapi/strapi": "5.9.0",
     "mysql2": "3.9.4",
     "react": "^18.0.0",

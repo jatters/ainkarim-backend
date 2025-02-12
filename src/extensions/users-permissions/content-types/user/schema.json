@@ -81,7 +81,7 @@
       "type": "string"
     },
     "mobile": {
-      "type": "integer"
+      "type": "biginteger"
     },
     "address": {
       "type": "string"
@@ -103,6 +103,31 @@
       "relation": "oneToMany",
       "target": "api::pedido.pedido",
       "mappedBy": "users_permissions_user"
+    },
+    "allowMarketing": {
+      "type": "boolean",
+      "default": false
+    },
+    "documentType": {
+      "type": "enumeration",
+      "enum": [
+        "Cédula",
+        "Cédula de extranjería",
+        "Pasaporte",
+        "NIT"
+      ],
+      "required": true
+    },
+    "bornDate": {
+      "type": "date"
+    },
+    "gender": {
+      "type": "enumeration",
+      "enum": [
+        "Masculino",
+        "Femenino",
+        "Otro"
+      ]
     }
   }
 }

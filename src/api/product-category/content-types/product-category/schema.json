@@ -4,7 +4,8 @@
   "info": {
     "singularName": "product-category",
     "pluralName": "productcategories",
-    "displayName": "Categorias de producto"
+    "displayName": "Categorias de producto",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -12,14 +13,16 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "string",
+      "required": true
     },
     "description": {
       "type": "text"
     },
     "slug": {
       "type": "uid",
-      "targetField": "name"
+      "targetField": "name",
+      "required": true
     },
     "productos": {
       "type": "relation",
