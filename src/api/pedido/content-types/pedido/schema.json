@@ -116,6 +116,9 @@
         "NIT",
         "Pasaporte"
       ]
+    },
+    "customerCity": {
+      "type": "string"
     }
   }
 }

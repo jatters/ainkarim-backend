@@ -178,22 +178,43 @@ async function validateReserva(event: any) {
   const planMax = planRaw.max_reservations || 0;
 
   if (planMax > 0) {
-    // Buscar reservas existentes en la misma fecha/hora/plan
-    const existing = await strapi.db.query('api::reserva.reserva').findMany({
-      where: {
-        plan: planIdObj.numericId,
-        reservationDate: data.reservationDate,
-        reservationTime: data.reservationTime,
-      },
-      select: ['guests'],
-    });
+    try {
+      // Buscar reservas existentes en la misma fecha/hora/plan
+      const existing = await strapi.db.query('api::reserva.reserva').findMany({
+        select: ['guests', 'state', 'payment_status'],
+        where: {
+          $and: [
+            { plan: { id: planIdObj.numericId } },
+            { reservationDate: data.reservationDate },
+            { reservationTime: data.reservationTime },
+            { state: { $in: ['Confirmada', 'Pendiente'] } }
+          ],
+          ...(event.params?.where?.id ? { id: { $ne: event.params.where.id } } : {})
+        },
+      });
 
-    const currentSum = existing.reduce((acc, r) => acc + (r.guests || 0), 0);
-    if (currentSum + newGuests > planMax) {
-      throw new ApplicationError(
-        `Aforo excedido. Solo quedan ${
-          planMax - currentSum
-        } cupos disponibles para ese horario.`
+      console.log('Reservas existentes:', existing.map(r => ({
+        guests: r.guests,
+        state: r.state,
+        payment_status: r.payment_status
+      })));
+      console.log('Capacidad máxima del plan:', planMax);
+      
+      const currentGuests = existing.reduce((acc, r) => acc + (r.guests || 0), 0);
+      console.log('Total de invitados actuales:', currentGuests);
+      console.log('Nuevos invitados:', newGuests);
+      
+      if (currentGuests + newGuests > planMax) {
+        throw new ApplicationError(
+          `Capacidad excedida. El plan tiene un máximo de ${planMax} personas por horario. ` +
+          `Actualmente hay ${currentGuests} personas reservadas y estás intentando agregar ${newGuests} más. ` +
+          `Solo quedan ${Math.max(0, planMax - currentGuests)} cupos disponibles.`
+        );
+      }
+    } catch (error) {
+      console.error('Error al validar aforo:', error);
+      throw error instanceof ApplicationError ? error : new ApplicationError(
+        'Error al validar el aforo. Por favor, contacta al administrador.'
       );
     }
   }

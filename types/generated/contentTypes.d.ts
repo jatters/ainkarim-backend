@@ -591,6 +591,7 @@ export interface ApiPedidoPedido extends Struct.CollectionTypeSchema {
       Schema.Attribute.Private;
     creationDate: Schema.Attribute.DateTime;
     customerAddress: Schema.Attribute.String;
+    customerCity: Schema.Attribute.String;
     customerDeparment: Schema.Attribute.String;
     customerDocument: Schema.Attribute.String & Schema.Attribute.Required;
     customerDocumentType: Schema.Attribute.Enumeration<
