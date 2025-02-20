@@ -379,7 +379,7 @@ export interface ApiAdditionalServiceAdditionalService
     singularName: 'additional-service';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -403,6 +403,69 @@ export interface ApiAdditionalServiceAdditionalService
   };
 }
 
+export interface ApiAdvertenciaYRecomendacionAdvertenciaYRecomendacion
+  extends Struct.SingleTypeSchema {
+  collectionName: 'advertencias_y_recomendaciones';
+  info: {
+    displayName: 'Advertencias y recomendaciones';
+    pluralName: 'advertencias-y-recomendaciones';
+    singularName: 'advertencia-y-recomendacion';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::advertencia-y-recomendacion.advertencia-y-recomendacion'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
+export interface ApiAvisoDePrivacidadAvisoDePrivacidad
+  extends Struct.SingleTypeSchema {
+  collectionName: 'avisos_de_privacidad';
+  info: {
+    description: '';
+    displayName: 'Aviso de privacidad';
+    pluralName: 'avisos-de-privacidad';
+    singularName: 'aviso-de-privacidad';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::aviso-de-privacidad.aviso-de-privacidad'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCorreoCorreo extends Struct.CollectionTypeSchema {
   collectionName: 'correos';
   info: {
@@ -412,7 +475,7 @@ export interface ApiCorreoCorreo extends Struct.CollectionTypeSchema {
     singularName: 'correo';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     allowMarketing: Schema.Attribute.Boolean;
@@ -451,7 +514,7 @@ export interface ApiExperienciaExperiencia extends Struct.CollectionTypeSchema {
     singularName: 'experiencia';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -483,10 +546,11 @@ export interface ApiFaqFaq extends Struct.CollectionTypeSchema {
     singularName: 'faq';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
-    content: Schema.Attribute.Text & Schema.Attribute.Required;
+    asnwer: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    content: Schema.Attribute.Text;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -510,7 +574,7 @@ export interface ApiHorarioHorario extends Struct.CollectionTypeSchema {
     singularName: 'horario';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -533,6 +597,35 @@ export interface ApiHorarioHorario extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiMenuMenu extends Struct.SingleTypeSchema {
+  collectionName: 'menus';
+  info: {
+    description: '';
+    displayName: 'Men\u00FA';
+    pluralName: 'menus';
+    singularName: 'menu';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks;
+    cover: Schema.Attribute.Media<'images'>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    images: Schema.Attribute.Media<'images', true> & Schema.Attribute.Required;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<'oneToMany', 'api::menu.menu'> &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiNosotroNosotro extends Struct.SingleTypeSchema {
   collectionName: 'nosotros';
   info: {
@@ -542,7 +635,7 @@ export interface ApiNosotroNosotro extends Struct.SingleTypeSchema {
     singularName: 'nosotro';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     cover: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
@@ -583,7 +676,7 @@ export interface ApiPedidoPedido extends Struct.CollectionTypeSchema {
     singularName: 'pedido';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -705,6 +798,39 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiPoliticaDatoPersonalPoliticaDatoPersonal
+  extends Struct.SingleTypeSchema {
+  collectionName: 'politica_datos_personales';
+  info: {
+    description: '';
+    displayName: 'Politica Datos Personales';
+    pluralName: 'politica-datos-personales';
+    singularName: 'politica-dato-personal';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::politica-dato-personal.politica-dato-personal'
+    > &
+      Schema.Attribute.Private;
+    politica: Schema.Attribute.Component<'politica.politica', true>;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiPopupPopup extends Struct.SingleTypeSchema {
   collectionName: 'popups';
   info: {
@@ -714,26 +840,34 @@ export interface ApiPopupPopup extends Struct.SingleTypeSchema {
     singularName: 'popup';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    endDate: Schema.Attribute.DateTime;
+    endDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
     image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
-    isActive: Schema.Attribute.Boolean;
+    isActive: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::popup.popup'> &
       Schema.Attribute.Private;
     publishedAt: Schema.Attribute.DateTime;
-    startDate: Schema.Attribute.DateTime;
+    startDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    visibleInHome: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
-    visibleInPlans: Schema.Attribute.Boolean;
-    visibleInStore: Schema.Attribute.Boolean;
+    visibleInHome: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    visibleInPlans: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
+    visibleInStore: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<false>;
   };
 }
 
@@ -747,7 +881,7 @@ export interface ApiProductCategoryProductCategory
     singularName: 'product-category';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -839,6 +973,38 @@ export interface ApiProductoProducto extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiPuntosDeVentaPuntosDeVenta extends Struct.SingleTypeSchema {
+  collectionName: 'puntos_de_ventas';
+  info: {
+    description: '';
+    displayName: 'Puntos de Venta';
+    pluralName: 'puntos-de-ventas';
+    singularName: 'puntos-de-venta';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::puntos-de-venta.puntos-de-venta'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    store: Schema.Attribute.Component<'punto-de-venta.punto-de-venta', true>;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiReglaPlanReglaPlan extends Struct.CollectionTypeSchema {
   collectionName: 'reglas_planes';
   info: {
@@ -848,7 +1014,7 @@ export interface ApiReglaPlanReglaPlan extends Struct.CollectionTypeSchema {
     singularName: 'regla-plan';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -885,6 +1051,37 @@ export interface ApiReglaPlanReglaPlan extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiReglamentoReglamento extends Struct.SingleTypeSchema {
+  collectionName: 'reglamentos';
+  info: {
+    description: '';
+    displayName: 'Reglamento';
+    pluralName: 'reglamentos';
+    singularName: 'reglamento';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::reglamento.reglamento'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiReservaReserva extends Struct.CollectionTypeSchema {
   collectionName: 'reservas';
   info: {
@@ -894,7 +1091,7 @@ export interface ApiReservaReserva extends Struct.CollectionTypeSchema {
     singularName: 'reserva';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     check_in_status: Schema.Attribute.Boolean;
@@ -949,6 +1146,38 @@ export interface ApiReservaReserva extends Struct.CollectionTypeSchema {
   };
 }
 
+export interface ApiTerminoYCondicionTerminoYCondicion
+  extends Struct.SingleTypeSchema {
+  collectionName: 'terminos_y_condiciones';
+  info: {
+    description: '';
+    displayName: 'T\u00E9rminos y condiciones';
+    pluralName: 'terminos-y-condiciones';
+    singularName: 'termino-y-condicion';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    image: Schema.Attribute.Media<'images'>;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::termino-y-condicion.termino-y-condicion'
+    > &
+      Schema.Attribute.Private;
+    publishedAt: Schema.Attribute.DateTime;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiVariacionVariacion extends Struct.CollectionTypeSchema {
   collectionName: 'variaciones';
   info: {
@@ -958,7 +1187,7 @@ export interface ApiVariacionVariacion extends Struct.CollectionTypeSchema {
     singularName: 'variacion';
   };
   options: {
-    draftAndPublish: true;
+    draftAndPublish: false;
   };
   attributes: {
     createdAt: Schema.Attribute.DateTime;
@@ -1518,18 +1747,25 @@ declare module '@strapi/strapi' {
       'admin::transfer-token-permission': AdminTransferTokenPermission;
       'admin::user': AdminUser;
       'api::additional-service.additional-service': ApiAdditionalServiceAdditionalService;
+      'api::advertencia-y-recomendacion.advertencia-y-recomendacion': ApiAdvertenciaYRecomendacionAdvertenciaYRecomendacion;
+      'api::aviso-de-privacidad.aviso-de-privacidad': ApiAvisoDePrivacidadAvisoDePrivacidad;
       'api::correo.correo': ApiCorreoCorreo;
       'api::experiencia.experiencia': ApiExperienciaExperiencia;
       'api::faq.faq': ApiFaqFaq;
       'api::horario.horario': ApiHorarioHorario;
+      'api::menu.menu': ApiMenuMenu;
       'api::nosotro.nosotro': ApiNosotroNosotro;
       'api::pedido.pedido': ApiPedidoPedido;
       'api::plan.plan': ApiPlanPlan;
+      'api::politica-dato-personal.politica-dato-personal': ApiPoliticaDatoPersonalPoliticaDatoPersonal;
       'api::popup.popup': ApiPopupPopup;
       'api::product-category.product-category': ApiProductCategoryProductCategory;
       'api::producto.producto': ApiProductoProducto;
+      'api::puntos-de-venta.puntos-de-venta': ApiPuntosDeVentaPuntosDeVenta;
       'api::regla-plan.regla-plan': ApiReglaPlanReglaPlan;
+      'api::reglamento.reglamento': ApiReglamentoReglamento;
       'api::reserva.reserva': ApiReservaReserva;
+      'api::termino-y-condicion.termino-y-condicion': ApiTerminoYCondicionTerminoYCondicion;
       'api::variacion.variacion': ApiVariacionVariacion;
       'plugin::content-releases.release': PluginContentReleasesRelease;
       'plugin::content-releases.release-action': PluginContentReleasesReleaseAction;

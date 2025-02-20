@@ -8,7 +8,7 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
@@ -18,6 +18,10 @@
     },
     "content": {
       "type": "text",
+      "required": false
+    },
+    "asnwer": {
+      "type": "blocks",
       "required": true
     }
   }

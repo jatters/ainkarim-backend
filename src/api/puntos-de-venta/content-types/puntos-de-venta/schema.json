@@ -1,0 +1,34 @@
+{
+  "kind": "singleType",
+  "collectionName": "puntos_de_ventas",
+  "info": {
+    "singularName": "puntos-de-venta",
+    "pluralName": "puntos-de-ventas",
+    "displayName": "Puntos de Venta",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "store": {
+      "type": "component",
+      "repeatable": true,
+      "component": "punto-de-venta.punto-de-venta"
+    },
+    "content": {
+      "type": "blocks"
+    },
+    "image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

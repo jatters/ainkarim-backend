@@ -1,0 +1,16 @@
+{
+  "collectionName": "components_politica_politicas",
+  "info": {
+    "displayName": "Politica"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "blocks"
+    }
+  }
+}

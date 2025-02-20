@@ -1,0 +1,34 @@
+{
+  "kind": "singleType",
+  "collectionName": "politica_datos_personales",
+  "info": {
+    "singularName": "politica-dato-personal",
+    "pluralName": "politica-datos-personales",
+    "displayName": "Politica Datos Personales",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "blocks"
+    },
+    "politica": {
+      "type": "component",
+      "repeatable": true,
+      "component": "politica.politica"
+    },
+    "image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

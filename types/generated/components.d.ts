@@ -23,6 +23,31 @@ export interface FilantropiaFilantropiaElement extends Struct.ComponentSchema {
   };
 }
 
+export interface PoliticaPolitica extends Struct.ComponentSchema {
+  collectionName: 'components_politica_politicas';
+  info: {
+    displayName: 'Politica';
+  };
+  attributes: {
+    content: Schema.Attribute.Blocks;
+    title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PuntoDeVentaPuntoDeVenta extends Struct.ComponentSchema {
+  collectionName: 'components_punto_de_venta_punto_de_ventas';
+  info: {
+    description: '';
+    displayName: 'Punto de venta';
+    icon: 'layout';
+  };
+  attributes: {
+    address: Schema.Attribute.Text & Schema.Attribute.Required;
+    city: Schema.Attribute.String & Schema.Attribute.Required;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
 export interface SliderSliderElement extends Struct.ComponentSchema {
   collectionName: 'components_slider_slider_elements';
   info: {
@@ -63,6 +88,8 @@ declare module '@strapi/strapi' {
     export interface ComponentSchemas {
       'atributos-ecommerce.atributo': AtributosEcommerceAtributo;
       'filantropia.filantropia-element': FilantropiaFilantropiaElement;
+      'politica.politica': PoliticaPolitica;
+      'punto-de-venta.punto-de-venta': PuntoDeVentaPuntoDeVenta;
       'slider.slider-element': SliderSliderElement;
       'timeline.timeline-element': TimelineTimelineElement;
       'viticultura.viticultura-element': ViticulturaViticulturaElement;

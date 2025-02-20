@@ -8,15 +8,17 @@
     "description": ""
   },
   "options": {
-    "draftAndPublish": true
+    "draftAndPublish": false
   },
   "pluginOptions": {},
   "attributes": {
     "startDate": {
-      "type": "datetime"
+      "type": "datetime",
+      "required": true
     },
     "endDate": {
-      "type": "datetime"
+      "type": "datetime",
+      "required": true
     },
     "image": {
       "type": "media",
@@ -27,17 +29,24 @@
       ]
     },
     "isActive": {
-      "type": "boolean"
+      "type": "boolean",
+      "required": true,
+      "default": false
     },
     "visibleInHome": {
       "type": "boolean",
-      "default": false
+      "default": false,
+      "required": true
     },
     "visibleInStore": {
-      "type": "boolean"
+      "type": "boolean",
+      "required": true,
+      "default": false
     },
     "visibleInPlans": {
-      "type": "boolean"
+      "type": "boolean",
+      "required": true,
+      "default": false
     }
   }
 }

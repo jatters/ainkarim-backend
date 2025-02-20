@@ -1,0 +1,30 @@
+{
+  "kind": "singleType",
+  "collectionName": "reglamentos",
+  "info": {
+    "singularName": "reglamento",
+    "pluralName": "reglamentos",
+    "displayName": "Reglamento",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "blocks",
+      "required": true
+    },
+    "image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

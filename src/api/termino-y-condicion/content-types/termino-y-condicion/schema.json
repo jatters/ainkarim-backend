@@ -1,0 +1,31 @@
+{
+  "kind": "singleType",
+  "collectionName": "terminos_y_condiciones",
+  "info": {
+    "singularName": "termino-y-condicion",
+    "pluralName": "terminos-y-condiciones",
+    "displayName": "Términos y condiciones",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "content": {
+      "type": "blocks",
+      "required": true
+    }
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "kind": "singleType",
+  "collectionName": "advertencias_y_recomendaciones",
+  "info": {
+    "singularName": "advertencia-y-recomendacion",
+    "pluralName": "advertencias-y-recomendaciones",
+    "displayName": "Advertencias y recomendaciones"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "content": {
+      "type": "blocks",
+      "required": true
+    },
+    "image": {
+      "allowedTypes": [
+        "images"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

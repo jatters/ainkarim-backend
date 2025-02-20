@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_punto_de_venta_punto_de_ventas",
+  "info": {
+    "displayName": "Punto de venta",
+    "icon": "layout",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "address": {
+      "type": "text",
+      "required": true
+    },
+    "city": {
+      "type": "string",
+      "required": true
+    }
+  }
+}
