@@ -396,7 +396,7 @@ export interface ApiAdditionalServiceAdditionalService
     planes: Schema.Attribute.Relation<'manyToMany', 'api::plan.plan'>;
     price: Schema.Attribute.Integer & Schema.Attribute.Required;
     publishedAt: Schema.Attribute.DateTime;
-    reservas: Schema.Attribute.Relation<'manyToMany', 'api::reserva.reserva'>;
+    reservas: Schema.Attribute.Relation<'oneToMany', 'api::reserva.reserva'>;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -502,6 +502,49 @@ export interface ApiCorreoCorreo extends Struct.CollectionTypeSchema {
     user_agent: Schema.Attribute.Text;
     userName: Schema.Attribute.String;
     uuid: Schema.Attribute.UID;
+  };
+}
+
+export interface ApiElVinedoElVinedo extends Struct.SingleTypeSchema {
+  collectionName: 'el_vinedos';
+  info: {
+    description: '';
+    displayName: 'El Vi\u00F1edo';
+    pluralName: 'el-vinedos';
+    singularName: 'el-vinedo';
+  };
+  options: {
+    draftAndPublish: false;
+  };
+  attributes: {
+    contactEmail: Schema.Attribute.Email & Schema.Attribute.Required;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    facebook: Schema.Attribute.String;
+    InfoEmail: Schema.Attribute.Email;
+    instagram: Schema.Attribute.String;
+    linkedin: Schema.Attribute.String;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::el-vinedo.el-vinedo'
+    > &
+      Schema.Attribute.Private;
+    officeAddress: Schema.Attribute.String;
+    officePhone: Schema.Attribute.BigInteger;
+    ordersPhone: Schema.Attribute.BigInteger;
+    publishedAt: Schema.Attribute.DateTime;
+    tiktok: Schema.Attribute.String;
+    tripAdvisor: Schema.Attribute.String;
+    twitter: Schema.Attribute.String;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    ventasEmail: Schema.Attribute.Email & Schema.Attribute.Required;
+    vinedoAddress: Schema.Attribute.String;
+    vinedoPhone: Schema.Attribute.BigInteger;
+    whatsapp: Schema.Attribute.BigInteger;
   };
 }
 
@@ -715,6 +758,7 @@ export interface ApiPedidoPedido extends Struct.CollectionTypeSchema {
       'api::producto.producto'
     >;
     publishedAt: Schema.Attribute.DateTime;
+    reservas: Schema.Attribute.Relation<'manyToMany', 'api::reserva.reserva'>;
     state: Schema.Attribute.Enumeration<
       [
         'Pendiente',
@@ -1120,15 +1164,16 @@ export interface ApiReservaReserva extends Struct.CollectionTypeSchema {
     payment_id: Schema.Attribute.String;
     payment_method: Schema.Attribute.String;
     payment_status: Schema.Attribute.Enumeration<
-      ['Pendiente', 'Pago', 'Fallido', 'approved']
+      ['Pendiente', 'Pago', 'Fallido', 'approved', 'rejected']
     >;
+    pedidos: Schema.Attribute.Relation<'manyToMany', 'api::pedido.pedido'>;
     plan: Schema.Attribute.Relation<'manyToOne', 'api::plan.plan'>;
     publishedAt: Schema.Attribute.DateTime;
     reservationDate: Schema.Attribute.Date & Schema.Attribute.Required;
     reservationNumber: Schema.Attribute.String & Schema.Attribute.Unique;
     reservationTime: Schema.Attribute.Time & Schema.Attribute.Required;
-    servicios_adicionales: Schema.Attribute.Relation<
-      'manyToMany',
+    servicios_adicionale: Schema.Attribute.Relation<
+      'manyToOne',
       'api::additional-service.additional-service'
     >;
     state: Schema.Attribute.Enumeration<
@@ -1750,6 +1795,7 @@ declare module '@strapi/strapi' {
       'api::advertencia-y-recomendacion.advertencia-y-recomendacion': ApiAdvertenciaYRecomendacionAdvertenciaYRecomendacion;
       'api::aviso-de-privacidad.aviso-de-privacidad': ApiAvisoDePrivacidadAvisoDePrivacidad;
       'api::correo.correo': ApiCorreoCorreo;
+      'api::el-vinedo.el-vinedo': ApiElVinedoElVinedo;
       'api::experiencia.experiencia': ApiExperienciaExperiencia;
       'api::faq.faq': ApiFaqFaq;
       'api::horario.horario': ApiHorarioHorario;

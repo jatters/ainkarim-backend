@@ -86,9 +86,9 @@
     "user_agent": {
       "type": "string"
     },
-    "servicios_adicionales": {
+    "servicios_adicionale": {
       "type": "relation",
-      "relation": "manyToMany",
+      "relation": "manyToOne",
       "target": "api::additional-service.additional-service",
       "inversedBy": "reservas"
     },
@@ -101,7 +101,8 @@
         "Pendiente",
         "Pago",
         "Fallido",
-        "approved"
+        "approved",
+        "rejected"
       ]
     },
     "payment_id": {
@@ -118,6 +119,12 @@
         "NIT",
         "Pasaporte"
       ]
+    },
+    "pedidos": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::pedido.pedido",
+      "mappedBy": "reservas"
     }
   }
 }

@@ -1,0 +1,62 @@
+{
+  "kind": "singleType",
+  "collectionName": "el_vinedos",
+  "info": {
+    "singularName": "el-vinedo",
+    "pluralName": "el-vinedos",
+    "displayName": "El Viñedo",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "attributes": {
+    "whatsapp": {
+      "type": "biginteger"
+    },
+    "ventasEmail": {
+      "type": "email",
+      "required": true
+    },
+    "contactEmail": {
+      "type": "email",
+      "required": true
+    },
+    "InfoEmail": {
+      "type": "email"
+    },
+    "vinedoPhone": {
+      "type": "biginteger"
+    },
+    "vinedoAddress": {
+      "type": "string"
+    },
+    "officeAddress": {
+      "type": "string"
+    },
+    "officePhone": {
+      "type": "biginteger"
+    },
+    "ordersPhone": {
+      "type": "biginteger"
+    },
+    "facebook": {
+      "type": "string"
+    },
+    "instagram": {
+      "type": "string"
+    },
+    "tripAdvisor": {
+      "type": "string"
+    },
+    "tiktok": {
+      "type": "string"
+    },
+    "twitter": {
+      "type": "string"
+    },
+    "linkedin": {
+      "type": "string"
+    }
+  }
+}

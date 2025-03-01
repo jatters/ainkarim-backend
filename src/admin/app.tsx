@@ -4,21 +4,7 @@ export default {
   config: {
     locales: ['es'],
   },
-  bootstrap(app: StrapiAdmin) {
+  bootstrap(app: StrapiApp) {
     console.log('Strapi Admin App Initialized:', app);
-
-    // ✅ Forma correcta de agregar un menú en Strapi v5
-    app.addMenuLink({
-      to: '/dashboard',
-      icon: 'ChartPie',
-      intlLabel: {
-        id: 'dashboard.label',
-        defaultMessage: 'Dashboard',
-      },
-      Component: async () => {
-        const Dashboard = await import('./extensions/dashboard/index');
-        return Dashboard.default || Dashboard;
-      },
-    });
   },
 };

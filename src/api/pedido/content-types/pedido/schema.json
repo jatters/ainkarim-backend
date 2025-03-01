@@ -119,6 +119,12 @@
     },
     "customerCity": {
       "type": "string"
+    },
+    "reservas": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::reserva.reserva",
+      "inversedBy": "pedidos"
     }
   }
 }

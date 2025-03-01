@@ -1,0 +1,17 @@
+{
+  "version": "v1",
+  "packages": {
+    "estado-de-reservas-admin": {
+      "signature": "be4514c77bcee1461e81cc60c30c8355",
+      "link": true
+    },
+    "estado-de-reservas": {
+      "signature": "b6cbbfb711ba80093edb56e115204ee6",
+      "link": true
+    },
+    "reservas-libres": {
+      "signature": "e87a73aaf0a96c7e1aa8adf572cf319d",
+      "link": true
+    }
+  }
+}
