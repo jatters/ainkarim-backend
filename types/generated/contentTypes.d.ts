@@ -813,6 +813,7 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
     gallery: Schema.Attribute.Media<'images', true>;
     horarios: Schema.Attribute.Relation<'manyToMany', 'api::horario.horario'>;
     image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<'oneToMany', 'api::plan.plan'> &
       Schema.Attribute.Private;
@@ -836,6 +837,7 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
     >;
     showInHome: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     slug: Schema.Attribute.UID<'name'> & Schema.Attribute.Required;
+    unitPlan: Schema.Attribute.String & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

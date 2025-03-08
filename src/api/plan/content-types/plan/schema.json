@@ -102,6 +102,14 @@
     "planDescription": {
       "type": "blocks",
       "required": true
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    },
+    "unitPlan": {
+      "type": "string",
+      "required": true
     }
   }
 }

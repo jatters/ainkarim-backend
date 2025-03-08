@@ -28,6 +28,7 @@
     "react-router-dom": "^6.0.0",
     "reservas-libres": "link:.yalc/reservas-libres",
     "sharp": "^0.33.5",
+    "strapi-provider-email-brevo": "^1.0.4",
     "styled-components": "^6.0.0"
   },
   "devDependencies": {

@@ -2,14 +2,14 @@ export default ({ env }) => ({
   // ...
   email: {
     config: {
-      provider: "sendgrid",
+      provider: "strapi-provider-email-brevo",
       providerOptions: {
-        apiKey: env("SENDGRID_API_KEY"),
+        apiKey: env("BREVO_API_KEY"),
       },
       settings: {
-        defaultFrom: "no-reply@ainkarim.co",
-        defaultReplyTo: "no-reply@ainkarim.co",
-        testAddress: "soporte@einscube.com",
+        defaultSenderEmail: "no-reply@ainkarim.co",
+        defaultSenderName: "Viñedo Ain Karim",
+        defaultReplyTo: "visitas@marquesvl.com",
       },
     },
   },
