@@ -758,7 +758,7 @@ export default {
                   <p style="font-size: 16px; font-weight: 700; text-align: center; color: #b22222;">Detalles de tu reserva fallida:</p>
                   <p><strong>📅 Fecha:</strong> ${fechaReserva}</p>
                   <p><strong>⏰ Hora:</strong> ${horaReserva}</p>
-                  <p><strong>👥 Número de invitados:</strong> ${numeroPersonas}</p>
+                  <p><strong>👥 Número de invitados:</strong> ${numeroPersonas} ${unitPlan}s</p>
                   <p><strong>🍷 Plan:</strong> ${nombrePlan}</p>
                 </div>
                 
