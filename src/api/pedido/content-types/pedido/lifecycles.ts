@@ -96,7 +96,7 @@ export default {
             <div style="margin-top: 20px;">
               <p style="font-size: 16px; line-height: 1.6;">
                 Si tienes alguna duda, contáctanos en  
-                <a href="mailto:ventas@marquesvl.com" style="color: #2d5339; font-weight: bold; text-decoration: none;">ventas@marquesvl.com</a>.
+                <a href="mailto:visitas@marquesvl.com" style="color: #2d5339; font-weight: bold; text-decoration: none;">visitas@marquesvl.com</a>.
               </p>
             </div>
             <!-- Despedida -->
@@ -291,9 +291,9 @@ export default {
                     <p style="font-size: 16px; line-height: 1.6">
                       Puedes escribirnos a
                       <a
-                        href="mailto:ventas@marquesvl.com"
+                        href="mailto:visitas@marquesvl.com"
                         style="color: #2d5339; font-weight: bold; text-decoration: none"
-                        >ventas@marquesvl.com</a
+                        >visitas@marquesvl.com</a
                       >.
                     </p>
                   </div>
@@ -378,7 +378,7 @@ export default {
                 <div style="margin-top: 20px;">
                   <p style="font-size: 16px; line-height: 1.6;">
                     Escríbenos a  
-                    <a href="mailto:ventas@marquesvl.com" style="color: #2d5339; font-weight: bold; text-decoration: none;">ventas@marquesvl.com</a>.
+                    <a href="mailto:visitas@marquesvl.com" style="color: #2d5339; font-weight: bold; text-decoration: none;">visitas@marquesvl.com</a>.
                   </p>
                 </div>
                 

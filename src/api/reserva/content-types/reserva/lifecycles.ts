@@ -475,7 +475,7 @@ export default {
               <div style="margin-top: 20px;">
                 <p style="font-size: 16px; line-height: 1.6;">
                   Si ya realizaste el pago y aún no recibes la confirmación, no te preocupes, puede tomar unos minutos. Si necesitas ayuda, contáctanos en  
-                  <a href="mailto:ventas@marquesvl.com" style="color: #2d5339; font-weight: bold; text-decoration: none;">ventas@marquesvl.com</a>.
+                  <a href="mailto:visitas@marquesvl.com" style="color: #2d5339; font-weight: bold; text-decoration: none;">visitas@marquesvl.com</a>.
                 </p>
                 <p style="font-size: 16px; line-height: 1.6;">  
                   ¡Nos emociona recibirte pronto en nuestro viñedo! 🌿  
@@ -699,7 +699,7 @@ export default {
                 <div style="margin-top: 20px;">
                   <p style="font-size: 16px; line-height: 1.6;">
                     Si tienes alguna duda o necesitas hacer cambios en tu reserva, contáctanos a 
-                    <a href="mailto:ventas@marquesvl.com" style="color: #2d5339; font-weight: bold; text-decoration: none;">ventas@marquesvl.com</a>.
+                    <a href="mailto:visitas@marquesvl.com" style="color: #2d5339; font-weight: bold; text-decoration: none;">visitas@marquesvl.com</a>.
                   </p>
                 </div>
                 
@@ -766,7 +766,7 @@ export default {
                 <div style="margin-top: 20px;">
                   <p style="font-size: 16px; line-height: 1.6;">
                     Si necesitas ayuda, escríbenos a  
-                    <a href="mailto:ventas@marquesvl.com" style="color: #b22222; font-weight: bold; text-decoration: none;">ventas@marquesvl.com</a>.
+                    <a href="mailto:visitas@marquesvl.com" style="color: #b22222; font-weight: bold; text-decoration: none;">visitas@marquesvl.com</a>.
                   </p>
                 </div>
 
@@ -842,7 +842,7 @@ export default {
                 <div style="margin-top: 20px;">
                   <p style="font-size: 16px; line-height: 1.6;">
                     Si necesitas ayuda, escríbenos a  
-                    <a href="mailto:ventas@marquesvl.com" style="color: #b22222; font-weight: bold; text-decoration: none;">ventas@marquesvl.com</a>.
+                    <a href="mailto:visitas@marquesvl.com" style="color: #b22222; font-weight: bold; text-decoration: none;">visitas@marquesvl.com</a>.
                   </p>
                 </div>
 
