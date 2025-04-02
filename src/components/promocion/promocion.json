@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_promocion_promocions",
+  "info": {
+    "displayName": "Promoción"
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "minQuantity": {
+      "type": "integer"
+    },
+    "quantityToPay": {
+      "type": "integer"
+    },
+    "productos": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::producto.producto"
+    },
+    "startDate": {
+      "type": "datetime"
+    },
+    "endDate": {
+      "type": "datetime"
+    },
+    "isActive": {
+      "type": "boolean"
+    }
+  }
+}

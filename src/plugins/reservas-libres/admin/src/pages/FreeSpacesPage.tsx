@@ -78,7 +78,7 @@ function formatNumber(value: number): string {
 function getDateRange(start: Date, end: Date) {
   const dates = [];
   const current = new Date(start);
-  while (current <= end) {
+  while (current.getTime() <= end.getTime()) {
     dates.push(new Date(current));
     current.setDate(current.getDate() + 1);
   }
@@ -180,6 +180,7 @@ const FreeSpacesPage = () => {
 
   // Al montar o cambiar la fecha / switch => recargamos planes
   useEffect(() => {
+    console.log('Fecha seleccionada en ISO:', selectedDate?.toISOString().split('T')[0]);
     fetchPlans();
     const intervalId = setInterval(fetchPlans, 30000); // 30000ms = 30s
     return () => clearInterval(intervalId);
@@ -239,6 +240,7 @@ const FreeSpacesPage = () => {
             onChange={(date: Date | null) => setSelectedDate(date)}
             value={selectedDate}
           />
+          {console.log('fecha', selectedDate)}
           <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
             <Switch
               checked={showFuture}

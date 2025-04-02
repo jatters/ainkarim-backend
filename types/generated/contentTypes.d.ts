@@ -466,6 +466,35 @@ export interface ApiAvisoDePrivacidadAvisoDePrivacidad
   };
 }
 
+export interface ApiCepaDeVinoCepaDeVino extends Struct.CollectionTypeSchema {
+  collectionName: 'cepas_de_vinos';
+  info: {
+    displayName: 'Cepas de Vino';
+    pluralName: 'cepas-de-vinos';
+    singularName: 'cepa-de-vino';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::cepa-de-vino.cepa-de-vino'
+    > &
+      Schema.Attribute.Private;
+    name: Schema.Attribute.String;
+    productos: Schema.Attribute.Relation<'oneToMany', 'api::producto.producto'>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+  };
+}
+
 export interface ApiCorreoCorreo extends Struct.CollectionTypeSchema {
   collectionName: 'correos';
   info: {
@@ -517,26 +546,35 @@ export interface ApiElVinedoElVinedo extends Struct.SingleTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    close: Schema.Attribute.String;
     contactEmail: Schema.Attribute.Email & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
     facebook: Schema.Attribute.String;
+    friday: Schema.Attribute.String;
     InfoEmail: Schema.Attribute.Email;
     instagram: Schema.Attribute.String;
+    lastTour: Schema.Attribute.String;
     linkedin: Schema.Attribute.String;
+    linkGoogleMaps: Schema.Attribute.String;
+    linkWaze: Schema.Attribute.String;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
       'api::el-vinedo.el-vinedo'
     > &
       Schema.Attribute.Private;
+    monday: Schema.Attribute.String;
     officeAddress: Schema.Attribute.String;
-    officePhone: Schema.Attribute.BigInteger;
-    ordersPhone: Schema.Attribute.BigInteger;
+    open: Schema.Attribute.String;
     publishedAt: Schema.Attribute.DateTime;
+    saturday: Schema.Attribute.String;
+    sunday: Schema.Attribute.String;
+    thursday: Schema.Attribute.String;
     tiktok: Schema.Attribute.String;
     tripAdvisor: Schema.Attribute.String;
+    tuesday: Schema.Attribute.String;
     twitter: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -544,6 +582,7 @@ export interface ApiElVinedoElVinedo extends Struct.SingleTypeSchema {
     ventasEmail: Schema.Attribute.Email & Schema.Attribute.Required;
     vinedoAddress: Schema.Attribute.String;
     vinedoPhone: Schema.Attribute.BigInteger;
+    wednesday: Schema.Attribute.String;
     whatsapp: Schema.Attribute.BigInteger;
   };
 }
@@ -966,6 +1005,10 @@ export interface ApiProductoProducto extends Struct.CollectionTypeSchema {
       'manyToOne',
       'api::product-category.product-category'
     >;
+    cepas_de_vino: Schema.Attribute.Relation<
+      'manyToOne',
+      'api::cepa-de-vino.cepa-de-vino'
+    >;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1016,6 +1059,35 @@ export interface ApiProductoProducto extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'No Aplica'>;
+  };
+}
+
+export interface ApiPromocionPromocion extends Struct.CollectionTypeSchema {
+  collectionName: 'promociones';
+  info: {
+    displayName: 'Promociones';
+    pluralName: 'promociones';
+    singularName: 'promocion';
+  };
+  options: {
+    draftAndPublish: true;
+  };
+  attributes: {
+    coupon: Schema.Attribute.Component<'coupon.coupon', false>;
+    createdAt: Schema.Attribute.DateTime;
+    createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
+    locale: Schema.Attribute.String & Schema.Attribute.Private;
+    localizations: Schema.Attribute.Relation<
+      'oneToMany',
+      'api::promocion.promocion'
+    > &
+      Schema.Attribute.Private;
+    promotion: Schema.Attribute.Component<'promocion.promocion', false>;
+    publishedAt: Schema.Attribute.DateTime;
+    updatedAt: Schema.Attribute.DateTime;
+    updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
+      Schema.Attribute.Private;
   };
 }
 
@@ -1796,6 +1868,7 @@ declare module '@strapi/strapi' {
       'api::additional-service.additional-service': ApiAdditionalServiceAdditionalService;
       'api::advertencia-y-recomendacion.advertencia-y-recomendacion': ApiAdvertenciaYRecomendacionAdvertenciaYRecomendacion;
       'api::aviso-de-privacidad.aviso-de-privacidad': ApiAvisoDePrivacidadAvisoDePrivacidad;
+      'api::cepa-de-vino.cepa-de-vino': ApiCepaDeVinoCepaDeVino;
       'api::correo.correo': ApiCorreoCorreo;
       'api::el-vinedo.el-vinedo': ApiElVinedoElVinedo;
       'api::experiencia.experiencia': ApiExperienciaExperiencia;
@@ -1809,6 +1882,7 @@ declare module '@strapi/strapi' {
       'api::popup.popup': ApiPopupPopup;
       'api::product-category.product-category': ApiProductCategoryProductCategory;
       'api::producto.producto': ApiProductoProducto;
+      'api::promocion.promocion': ApiPromocionPromocion;
       'api::puntos-de-venta.puntos-de-venta': ApiPuntosDeVentaPuntosDeVenta;
       'api::regla-plan.regla-plan': ApiReglaPlanReglaPlan;
       'api::reglamento.reglamento': ApiReglamentoReglamento;

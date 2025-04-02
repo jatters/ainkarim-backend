@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "cepas_de_vinos",
+  "info": {
+    "singularName": "cepa-de-vino",
+    "pluralName": "cepas-de-vinos",
+    "displayName": "Cepas de Vino"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "productos": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::producto.producto",
+      "mappedBy": "cepas_de_vino"
+    }
+  }
+}

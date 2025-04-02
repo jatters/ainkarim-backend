@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_coupon_coupons",
+  "info": {
+    "displayName": "coupon",
+    "icon": "priceTag",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "startDate": {
+      "type": "datetime",
+      "required": true
+    },
+    "endDate": {
+      "type": "datetime",
+      "required": true
+    },
+    "code": {
+      "type": "string",
+      "required": true
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true,
+      "required": true
+    },
+    "percent": {
+      "type": "integer",
+      "max": 100,
+      "min": 0,
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

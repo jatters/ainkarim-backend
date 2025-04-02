@@ -34,12 +34,6 @@
     "officeAddress": {
       "type": "string"
     },
-    "officePhone": {
-      "type": "biginteger"
-    },
-    "ordersPhone": {
-      "type": "biginteger"
-    },
     "facebook": {
       "type": "string"
     },
@@ -56,6 +50,42 @@
       "type": "string"
     },
     "linkedin": {
+      "type": "string"
+    },
+    "open": {
+      "type": "string"
+    },
+    "close": {
+      "type": "string"
+    },
+    "lastTour": {
+      "type": "string"
+    },
+    "monday": {
+      "type": "string"
+    },
+    "tuesday": {
+      "type": "string"
+    },
+    "wednesday": {
+      "type": "string"
+    },
+    "thursday": {
+      "type": "string"
+    },
+    "friday": {
+      "type": "string"
+    },
+    "saturday": {
+      "type": "string"
+    },
+    "sunday": {
+      "type": "string"
+    },
+    "linkWaze": {
+      "type": "string"
+    },
+    "linkGoogleMaps": {
       "type": "string"
     }
   }

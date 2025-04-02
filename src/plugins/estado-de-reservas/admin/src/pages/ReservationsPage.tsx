@@ -19,7 +19,7 @@ import { useFetchClient, useNotification } from '@strapi/strapi/admin';
 const formatReservationDate = (dateString: string | null): string => {
   if (!dateString) return '';
   const date = new Date(dateString + 'T00:00:00');
-  const month = date.toLocaleString('es-ES', { month: 'long' });
+  const month = date.toLocaleString('es-CO', { month: 'long' });
   const day = date.getDate();
   const year = date.getFullYear();
   const monthCapitalized = month.charAt(0).toUpperCase() + month.slice(1);
@@ -77,16 +77,17 @@ const renderState = (state: string) => {
     case 'Pendiente':
       return <span style={{ color: '#FFEB3B' }}>Pendiente</span>;
     case 'Cancelada':
-      return <span style={{ color: '#F44336' }}>Cancelada</span>;    
+      return <span style={{ color: '#F44336' }}>Cancelada</span>;
     default:
       return <span>{state}</span>;
   }
 };
 
-
 const ReservationsPage = () => {
   const [reservations, setReservations] = useState<any[]>([]);
-  const [filterDate, setFilterDate] = useState<Date | null>(new Date());
+  const [filterDate, setFilterDate] = useState<Date | null>(
+    new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
+  );
   const [showFuture, setShowFuture] = useState(true);
   const { formatMessage } = useIntl();
   const { get, put } = useFetchClient();
@@ -159,6 +160,114 @@ const ReservationsPage = () => {
     }
   };
 
+  const handleExport = () => {
+    
+    const csvHeader = [
+      'Tipo Identificación *',
+      'Identificación *',
+      'Ciudad Identificación*',
+      'Primer Nombre ó Razon Social*',
+      'Segundo Nombre',
+      'Primer Apellido *',
+      'Segundo Apellido',
+      'Tipo Tercero *',
+      'Código',
+      'Activo',
+      'Actividad Económica',
+      'Tipo Contribuyente *',
+      'Clasi. Administrador Impuesto *',
+      'Excepción Impuesto',
+      'Tarifa Reteica Compras',
+      'Aplica Reteica Ventas',
+      'Maneja Cupo Crédito',
+      'Vendedor',
+      'Lista Precios',
+      'Forma Pago',
+      'Plazo Días',
+      'Porcentaje Descuento',
+      'Tipo Dirección *',
+      'Nombre Dirección *',
+      'Dirección *',
+      'Teléfonos *',
+      'Email *',
+      'Ciudad Dirección *',
+      'Zona',
+      'Barrio',
+      'No. Pedido',
+      'No. Reserva',
+      'Estado',      
+      'Fecha de Reserva',
+      'Personas',      
+      'Plan',
+      'Servicio Adicional',
+      'Hora de Reserva',
+      'Total',
+      `Check-in`
+    ];
+    
+    const csvRows = [];
+    csvRows.push(csvHeader.join(';'));
+
+    reservations.forEach((reservation) => {
+      const row = [
+        reservation.customerDocumentType, //Tipo Identificación
+        reservation.customerDocument, //Identificación
+        reservation.customerCity, //Ciudad Identificación
+        reservation.customerName, //Primer Nombre ó Razon Social
+        reservation.customerMiddleName, //Segundo Nombre
+        reservation.customerLastname, //Primer Apellido
+        reservation.customerSecondLastname, //Segundo Apellido
+        'Cliente', //Tipo Tercero
+        '', //Código
+        'Si', //Activo
+        '', //Actividad Económica
+        'Persona Natural No Responsable del IVA', //Tipo Contribuyente
+        'Normal', //Clasi. Administrador Impuesto
+        '', //Excepción Impuesto
+        '', //Tarifa Reteica Compras
+        '', //Aplica Reteica Ventas
+        'No', //Maneja Cupo Crédito
+        'Página Web', //Vendedor
+        '', //Lista Precios
+        reservation.state === 'Confirmada' ? 'Mercado Pago' : 'Sin pago', //Forma Pago
+        '', //Plazo Días
+        '', //Porcentaje Descuento
+        '', //Tipo Dirección
+        'Principal', //Nombre Dirección
+        reservation.customerAddress, //Dirección
+        reservation.customerPhone, //Teléfonos
+        reservation.customerEmail, //Email
+        reservation.customerAddressCity, //Ciudad Dirección
+        '', //Zona
+        '', //Barrio                
+        reservation.pedidos?.length > 0 ? `P-${reservation.pedidos[0].id}` : 'Sin pedido', //No. Pedido
+        `R-${reservation.id}`, //No. Reserva
+        reservation.state, //Estado
+        reservation.reservationDate, //Fecha de Reserva
+        reservation.guests, //Personas
+        reservation.plan?.name || '-', //Plan
+        reservation.servicios_adicionale ? reservation.servicios_adicionale.name : '-', //Servicio Adicional
+        formatReservationTime(reservation.reservationTime), //Hora de Reserva
+        formatCurrency(reservation.totalPriceReservation), //Total
+        reservation.check_in_status ? 'Si' : 'No' //Check-in
+      ];
+      csvRows.push(row.join(';'));
+    });
+    
+    let csvString = csvRows.join('\n');
+    csvString = '\uFEFF' + csvString;
+
+    const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'order-list.csv';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <Main>
       {/* Encabezado */}
@@ -189,7 +298,10 @@ const ReservationsPage = () => {
         >
           <DatePicker
             onChange={(date: Date | null) => {
-              if (date) setFilterDate(date);
+              if (date) {
+                const localDate = new Date(date.getFullYear(), date.getMonth(), date.getDate());
+                setFilterDate(localDate);
+              }
             }}
             value={filterDate}
           />
@@ -203,6 +315,8 @@ const ReservationsPage = () => {
             <span style={{ fontSize: '14px' }}>Mostrar reservas futuras</span>
           </div>
           <Button onClick={fetchReservations}>Actualizar</Button>
+
+          <Button onClick={handleExport}>Exportar Reservas</Button>
         </Box>
 
         <Table>
@@ -275,6 +389,7 @@ const ReservationsPage = () => {
                 reservationTime,
                 totalPriceReservation,
                 check_in_status,
+                pedidos,
               } = reservation;
 
               return (
@@ -290,7 +405,12 @@ const ReservationsPage = () => {
                     (e.currentTarget.style.backgroundColor = '')
                   }
                 >
-                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>{reservationNumber}</Td>
+                  {/* Numero de reserva */}
+                  {/* <Td style={{ textAlign: 'center', fontSize: '12px' }}>{reservationNumber}</Td> */}
+                  {/* Numero de pedido */}
+                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>
+                    {pedidos?.length > 0 ? `P-${pedidos?.[0].id}` : 'Sin pedido'}
+                  </Td>
                   <Td style={{ textAlign: 'center', fontSize: '12px' }}>{renderState(state)}</Td>
                   <Td style={{ textAlign: 'center', fontSize: '12px' }}>{formatDate(createdAt)}</Td>
                   <Td style={{ textAlign: 'center', fontSize: '12px' }}>
@@ -308,9 +428,7 @@ const ReservationsPage = () => {
                   <Td style={{ textAlign: 'center', fontSize: '12px' }}>{guests}</Td>
                   <Td style={{ textAlign: 'center', fontSize: '12px' }}>{plan?.name || '-'}</Td>
                   <Td style={{ textAlign: 'center', fontSize: '12px' }}>
-                    {servicios_adicionale
-                      ? reservation.servicios_adicionale.name
-                      : '-'}
+                    {servicios_adicionale ? reservation.servicios_adicionale.name : '-'}
                   </Td>
                   <Td style={{ textAlign: 'center', fontSize: '12px' }}>
                     {formatReservationTime(reservationTime)}
@@ -319,11 +437,12 @@ const ReservationsPage = () => {
                     {formatCurrency(totalPriceReservation)}
                   </Td>
                   <Td style={{ textAlign: 'center', fontSize: '12px' }}>
-                    {check_in_status ? (
-                      <Typography style={{ color: '#8BC34A' }}>Checked</Typography>
-                    ) : (
-                      <Button onClick={() => handleCheckIn(documentId)} >Check In</Button>
-                    )}
+                    {state === 'Confirmada' &&
+                      (check_in_status ? (
+                        <Typography style={{ color: '#8BC34A' }}>Checked</Typography>
+                      ) : (
+                        <Button onClick={() => handleCheckIn(documentId)}>Check In</Button>
+                      ))}
                   </Td>
                 </Tr>
               );

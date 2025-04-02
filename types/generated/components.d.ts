@@ -11,6 +11,34 @@ export interface AtributosEcommerceAtributo extends Struct.ComponentSchema {
   };
 }
 
+export interface CouponCoupon extends Struct.ComponentSchema {
+  collectionName: 'components_coupon_coupons';
+  info: {
+    description: '';
+    displayName: 'coupon';
+    icon: 'priceTag';
+  };
+  attributes: {
+    code: Schema.Attribute.String & Schema.Attribute.Required;
+    description: Schema.Attribute.Text;
+    endDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
+    isActive: Schema.Attribute.Boolean &
+      Schema.Attribute.Required &
+      Schema.Attribute.DefaultTo<true>;
+    name: Schema.Attribute.String & Schema.Attribute.Required;
+    percent: Schema.Attribute.Integer &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 100;
+          min: 0;
+        },
+        number
+      >;
+    startDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
+  };
+}
+
 export interface FilantropiaFilantropiaElement extends Struct.ComponentSchema {
   collectionName: 'components_filantropia_filantropia_elements';
   info: {
@@ -31,6 +59,23 @@ export interface PoliticaPolitica extends Struct.ComponentSchema {
   attributes: {
     content: Schema.Attribute.Blocks;
     title: Schema.Attribute.String & Schema.Attribute.Required;
+  };
+}
+
+export interface PromocionPromocion extends Struct.ComponentSchema {
+  collectionName: 'components_promocion_promocions';
+  info: {
+    displayName: 'Promoci\u00F3n';
+  };
+  attributes: {
+    description: Schema.Attribute.Text;
+    endDate: Schema.Attribute.DateTime;
+    isActive: Schema.Attribute.Boolean;
+    minQuantity: Schema.Attribute.Integer;
+    name: Schema.Attribute.String;
+    productos: Schema.Attribute.Relation<'oneToMany', 'api::producto.producto'>;
+    quantityToPay: Schema.Attribute.Integer;
+    startDate: Schema.Attribute.DateTime;
   };
 }
 
@@ -87,8 +132,10 @@ declare module '@strapi/strapi' {
   export module Public {
     export interface ComponentSchemas {
       'atributos-ecommerce.atributo': AtributosEcommerceAtributo;
+      'coupon.coupon': CouponCoupon;
       'filantropia.filantropia-element': FilantropiaFilantropiaElement;
       'politica.politica': PoliticaPolitica;
+      'promocion.promocion': PromocionPromocion;
       'punto-de-venta.punto-de-venta': PuntoDeVentaPuntoDeVenta;
       'slider.slider-element': SliderSliderElement;
       'timeline.timeline-element': TimelineTimelineElement;

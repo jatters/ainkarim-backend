@@ -1,0 +1,24 @@
+{
+  "kind": "collectionType",
+  "collectionName": "promociones",
+  "info": {
+    "singularName": "promocion",
+    "pluralName": "promociones",
+    "displayName": "Promociones"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "attributes": {
+    "coupon": {
+      "type": "component",
+      "repeatable": false,
+      "component": "coupon.coupon"
+    },
+    "promotion": {
+      "type": "component",
+      "repeatable": false,
+      "component": "promocion.promocion"
+    }
+  }
+}

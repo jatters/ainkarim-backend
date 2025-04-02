@@ -109,6 +109,12 @@
     "productDescription": {
       "type": "blocks",
       "required": true
+    },
+    "cepas_de_vino": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::cepa-de-vino.cepa-de-vino",
+      "inversedBy": "productos"
     }
   }
 }
