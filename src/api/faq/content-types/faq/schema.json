@@ -16,10 +16,6 @@
       "type": "string",
       "required": true
     },
-    "content": {
-      "type": "text",
-      "required": false
-    },
     "asnwer": {
       "type": "blocks",
       "required": true
