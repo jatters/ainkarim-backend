@@ -15,6 +15,7 @@ import {
 } from '@strapi/design-system';
 import { useIntl } from 'react-intl';
 import { useFetchClient, useNotification } from '@strapi/strapi/admin';
+import { ArrowUp, ArrowDown } from '@strapi/icons';
 
 const formatReservationDate = (dateString: string | null): string => {
   if (!dateString) return '';
@@ -84,6 +85,8 @@ const renderState = (state: string) => {
 };
 
 const ReservationsPage = () => {
+  const [sortField, setSortField] = useState<string>('reservationDate');
+  const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
   const [reservations, setReservations] = useState<any[]>([]);
   const [filterDate, setFilterDate] = useState<Date | null>(
     new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
@@ -94,13 +97,22 @@ const ReservationsPage = () => {
   const { toggleNotification } = useNotification();
 
   const token = process.env.STRAPI_ADMIN_TOKEN_PLUGINS || '';
+  const handleSort = (field: string) => {
+    if (sortField === field) {
+      setSortOrder((prev) => (prev === 'asc' ? 'desc' : 'asc'));
+    } else {
+      setSortField(field);
+      setSortOrder('asc');
+    }
+  };
 
   const fetchReservations = async () => {
     if (!filterDate) return;
     const formattedDate = filterDate.toISOString().split('T')[0];
+    const sortParam = `${sortField}:${sortOrder}`;
     const query = showFuture
-      ? `?filters[reservationDate][$gte]=${formattedDate}&filters[state][$ne]=Cancelada&sort=reservationDate&pagination[page]=1&pagination[pageSize]=1000`
-      : `?filters[reservationDate][$eq]=${formattedDate}&filters[state][$ne]=Cancelada&sort=reservationDate&pagination[page]=1&pagination[pageSize]=1000`;
+      ? `?filters[reservationDate][$gte]=${formattedDate}&filters[state][$ne]=Cancelada&sort=${sortParam}&pagination[page]=1&pagination[pageSize]=1000`
+      : `?filters[reservationDate][$eq]=${formattedDate}&filters[state][$ne]=Cancelada&sort=${sortParam}&pagination[page]=1&pagination[pageSize]=1000`;
 
     const url = `/api/reservas${query}&populate=*`;
 
@@ -125,7 +137,7 @@ const ReservationsPage = () => {
     fetchReservations();
     const intervalId = setInterval(fetchReservations, 30000); // 30000ms = 30s
     return () => clearInterval(intervalId);
-  }, [filterDate, showFuture]);
+  }, [filterDate, showFuture, sortField, sortOrder]);
 
   const handleCheckIn = async (id: string) => {
     try {
@@ -161,7 +173,6 @@ const ReservationsPage = () => {
   };
 
   const handleExport = () => {
-    
     const csvHeader = [
       'Tipo Identificación *',
       'Identificación *',
@@ -170,7 +181,7 @@ const ReservationsPage = () => {
       'Segundo Nombre',
       'Primer Apellido *',
       'Segundo Apellido',
-      'Tipo Tercero *',
+      'Tipo Tercero*',
       'Código',
       'Activo',
       'Actividad Económica',
@@ -195,16 +206,16 @@ const ReservationsPage = () => {
       'Barrio',
       'No. Pedido',
       'No. Reserva',
-      'Estado',      
+      'Estado',
       'Fecha de Reserva',
-      'Personas',      
+      'Personas',
       'Plan',
       'Servicio Adicional',
       'Hora de Reserva',
       'Total',
-      `Check-in`
+      `Check-in`,
     ];
-    
+
     const csvRows = [];
     csvRows.push(csvHeader.join(';'));
 
@@ -239,7 +250,7 @@ const ReservationsPage = () => {
         reservation.customerEmail, //Email
         reservation.customerAddressCity, //Ciudad Dirección
         '', //Zona
-        '', //Barrio                
+        '', //Barrio
         reservation.pedidos?.length > 0 ? `P-${reservation.pedidos[0].id}` : 'Sin pedido', //No. Pedido
         `R-${reservation.id}`, //No. Reserva
         reservation.state, //Estado
@@ -249,11 +260,11 @@ const ReservationsPage = () => {
         reservation.servicios_adicionale ? reservation.servicios_adicionale.name : '-', //Servicio Adicional
         formatReservationTime(reservation.reservationTime), //Hora de Reserva
         formatCurrency(reservation.totalPriceReservation), //Total
-        reservation.check_in_status ? 'Si' : 'No' //Check-in
+        reservation.check_in_status ? 'Si' : 'No', //Check-in
       ];
       csvRows.push(row.join(';'));
     });
-    
+
     let csvString = csvRows.join('\n');
     csvString = '\uFEFF' + csvString;
 
@@ -322,8 +333,13 @@ const ReservationsPage = () => {
         <Table>
           <Thead>
             <Tr>
-              <Th>
+              <Th onClick={() => handleSort('pedidos.id')} style={{ cursor: 'pointer' }}>
                 <span style={{ margin: 'auto', display: 'block', fontSize: '14px' }}>PEDIDO</span>
+                {sortField === 'pedidos.id' && (
+                  <span style={{ margin: 'auto', display: 'block', fontSize: '12px' }}>
+                    {sortOrder === 'asc' ? <ArrowUp /> : <ArrowDown />}
+                  </span>
+                )}
               </Th>
               <Th style={{ textAlign: 'center' }}>
                 <span style={{ margin: 'auto', display: 'block', fontSize: '12px' }}>ESTADO</span>
