@@ -1,0 +1,24 @@
+{
+  "collectionName": "components_reglas_dia_restringidos",
+  "info": {
+    "displayName": "Dia Restringido",
+    "icon": "calendar",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "restrictedDay": {
+      "type": "enumeration",
+      "enum": [
+        "Domingo",
+        "Lunes",
+        "Martes",
+        "Miercoles",
+        "Jueves",
+        "Viernes",
+        "Sabado"
+      ],
+      "required": true
+    }
+  }
+}

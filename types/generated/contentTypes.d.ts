@@ -846,7 +846,6 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    description: Schema.Attribute.RichText;
     duration: Schema.Attribute.Integer;
     experiencias: Schema.Attribute.Relation<
       'manyToMany',
@@ -873,6 +872,7 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
       'api::regla-plan.regla-plan'
     >;
     reservas: Schema.Attribute.Relation<'oneToMany', 'api::reserva.reserva'>;
+    SEODescription: Schema.Attribute.Text;
     servicios_adicionales: Schema.Attribute.Relation<
       'manyToMany',
       'api::additional-service.additional-service'
@@ -1144,6 +1144,7 @@ export interface ApiReglaPlanReglaPlan extends Struct.CollectionTypeSchema {
     day: Schema.Attribute.Enumeration<
       ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
     >;
+    isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     isDayRestric: Schema.Attribute.Boolean &
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<false>;
@@ -1166,6 +1167,21 @@ export interface ApiReglaPlanReglaPlan extends Struct.CollectionTypeSchema {
     rangeDateUntil: Schema.Attribute.DateTime;
     rangeHourFrom: Schema.Attribute.Time;
     rangeHourUntil: Schema.Attribute.Time;
+    Reglas: Schema.Attribute.DynamicZone<
+      [
+        'reglas.regla-rango-de-fecha',
+        'reglas.rango-de-hora',
+        'reglas.dia-restringido',
+      ]
+    > &
+      Schema.Attribute.Required &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 1;
+          min: 1;
+        },
+        number
+      >;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

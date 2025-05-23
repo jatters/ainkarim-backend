@@ -1,0 +1,27 @@
+{
+  "collectionName": "components_reglas_rango_de_horas",
+  "info": {
+    "displayName": "Rango de hora",
+    "icon": "calendar",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "startDate": {
+      "type": "date",
+      "required": true
+    },
+    "endDate": {
+      "type": "date",
+      "required": true
+    },
+    "startTime": {
+      "type": "time",
+      "required": true
+    },
+    "endTime": {
+      "type": "time",
+      "required": true
+    }
+  }
+}

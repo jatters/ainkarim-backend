@@ -308,7 +308,7 @@ async function validateReserva(event: any) {
  */
 export default {
   async beforeCreate(event: any) {
-    await validateReserva(event);
+    //await validateReserva(event);
 
     const { data } = event.params;
     console.log("[DEBUG] beforeCreate - Incoming data:", data);
@@ -363,7 +363,7 @@ export default {
   },
 
   async beforeUpdate(event: any) {
-    await validateReserva(event);
+    //await validateReserva(event);
 
     const { data } = event.params;
     console.log("[DEBUG] beforeUpdate - Incoming data:", data);

@@ -96,9 +96,6 @@
       "type": "boolean",
       "default": false
     },
-    "description": {
-      "type": "richtext"
-    },
     "planDescription": {
       "type": "blocks",
       "required": true
@@ -110,6 +107,9 @@
     "unitPlan": {
       "type": "string",
       "required": true
+    },
+    "SEODescription": {
+      "type": "text"
     }
   }
 }

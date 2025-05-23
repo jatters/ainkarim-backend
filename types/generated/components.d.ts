@@ -93,6 +93,49 @@ export interface PuntoDeVentaPuntoDeVenta extends Struct.ComponentSchema {
   };
 }
 
+export interface ReglasDiaRestringido extends Struct.ComponentSchema {
+  collectionName: 'components_reglas_dia_restringidos';
+  info: {
+    description: '';
+    displayName: 'Dia Restringido';
+    icon: 'calendar';
+  };
+  attributes: {
+    restrictedDay: Schema.Attribute.Enumeration<
+      ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
+    > &
+      Schema.Attribute.Required;
+  };
+}
+
+export interface ReglasRangoDeHora extends Struct.ComponentSchema {
+  collectionName: 'components_reglas_rango_de_horas';
+  info: {
+    description: '';
+    displayName: 'Rango de hora';
+    icon: 'calendar';
+  };
+  attributes: {
+    endDate: Schema.Attribute.Date & Schema.Attribute.Required;
+    endTime: Schema.Attribute.Time & Schema.Attribute.Required;
+    startDate: Schema.Attribute.Date & Schema.Attribute.Required;
+    startTime: Schema.Attribute.Time & Schema.Attribute.Required;
+  };
+}
+
+export interface ReglasReglaRangoDeFecha extends Struct.ComponentSchema {
+  collectionName: 'components_reglas_regla_rango_de_fechas';
+  info: {
+    description: '';
+    displayName: 'Rango de Fecha';
+    icon: 'calendar';
+  };
+  attributes: {
+    endDate: Schema.Attribute.Date & Schema.Attribute.Required;
+    startDate: Schema.Attribute.Date & Schema.Attribute.Required;
+  };
+}
+
 export interface SliderSliderElement extends Struct.ComponentSchema {
   collectionName: 'components_slider_slider_elements';
   info: {
@@ -137,6 +180,9 @@ declare module '@strapi/strapi' {
       'politica.politica': PoliticaPolitica;
       'promocion.promocion': PromocionPromocion;
       'punto-de-venta.punto-de-venta': PuntoDeVentaPuntoDeVenta;
+      'reglas.dia-restringido': ReglasDiaRestringido;
+      'reglas.rango-de-hora': ReglasRangoDeHora;
+      'reglas.regla-rango-de-fecha': ReglasReglaRangoDeFecha;
       'slider.slider-element': SliderSliderElement;
       'timeline.timeline-element': TimelineTimelineElement;
       'viticultura.viticultura-element': ViticulturaViticulturaElement;
