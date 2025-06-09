@@ -59,8 +59,8 @@
     },
     "isActive": {
       "type": "boolean",
-      "default": true,
-      "required": true
+      "required": true,
+      "default": true
     },
     "isVariable": {
       "type": "boolean",
@@ -77,6 +77,8 @@
     },
     "wineCepa": {
       "type": "enumeration",
+      "required": true,
+      "default": "No Aplica",
       "enum": [
         "No Aplica",
         "Cabernet",
@@ -85,20 +87,18 @@
         "Merlot",
         "Syrah",
         "Pinot Noir"
-      ],
-      "default": "No Aplica",
-      "required": true
+      ]
     },
     "wineColor": {
       "type": "enumeration",
+      "required": true,
+      "default": "No Aplica",
       "enum": [
         "No Aplica",
         "Tinto",
         "Blanco",
         "Rosado"
-      ],
-      "default": "No Aplica",
-      "required": true
+      ]
     },
     "pedidos": {
       "type": "relation",
@@ -115,6 +115,10 @@
       "relation": "manyToOne",
       "target": "api::cepa-de-vino.cepa-de-vino",
       "inversedBy": "productos"
+    },
+    "outOfStock": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

@@ -16,45 +16,6 @@
       "type": "string",
       "required": true
     },
-    "isRangeData": {
-      "type": "boolean",
-      "default": false,
-      "required": true
-    },
-    "rangeDateFrom": {
-      "type": "datetime"
-    },
-    "rangeDateUntil": {
-      "type": "datetime"
-    },
-    "isRangeHour": {
-      "type": "boolean",
-      "required": true,
-      "default": false
-    },
-    "rangeHourFrom": {
-      "type": "time"
-    },
-    "rangeHourUntil": {
-      "type": "time"
-    },
-    "isDayRestric": {
-      "type": "boolean",
-      "default": false,
-      "required": true
-    },
-    "day": {
-      "type": "enumeration",
-      "enum": [
-        "Domingo",
-        "Lunes",
-        "Martes",
-        "Miercoles",
-        "Jueves",
-        "Viernes",
-        "Sabado"
-      ]
-    },
     "plans": {
       "type": "relation",
       "relation": "manyToMany",

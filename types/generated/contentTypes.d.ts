@@ -1028,6 +1028,7 @@ export interface ApiProductoProducto extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     order: Schema.Attribute.Integer;
+    outOfStock: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     pedidos: Schema.Attribute.Relation<'manyToMany', 'api::pedido.pedido'>;
     price: Schema.Attribute.Integer;
     productDescription: Schema.Attribute.Blocks & Schema.Attribute.Required;
@@ -1141,19 +1142,7 @@ export interface ApiReglaPlanReglaPlan extends Struct.CollectionTypeSchema {
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
-    day: Schema.Attribute.Enumeration<
-      ['Domingo', 'Lunes', 'Martes', 'Miercoles', 'Jueves', 'Viernes', 'Sabado']
-    >;
     isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
-    isDayRestric: Schema.Attribute.Boolean &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<false>;
-    isRangeData: Schema.Attribute.Boolean &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<false>;
-    isRangeHour: Schema.Attribute.Boolean &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',
@@ -1163,10 +1152,6 @@ export interface ApiReglaPlanReglaPlan extends Struct.CollectionTypeSchema {
     name: Schema.Attribute.String & Schema.Attribute.Required;
     plans: Schema.Attribute.Relation<'manyToMany', 'api::plan.plan'>;
     publishedAt: Schema.Attribute.DateTime;
-    rangeDateFrom: Schema.Attribute.DateTime;
-    rangeDateUntil: Schema.Attribute.DateTime;
-    rangeHourFrom: Schema.Attribute.Time;
-    rangeHourUntil: Schema.Attribute.Time;
     Reglas: Schema.Attribute.DynamicZone<
       [
         'reglas.regla-rango-de-fecha',
