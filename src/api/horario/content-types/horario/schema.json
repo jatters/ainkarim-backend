@@ -29,6 +29,10 @@
       "relation": "manyToMany",
       "target": "api::plan.plan",
       "inversedBy": "horarios"
+    },
+    "capacity": {
+      "type": "integer",
+      "required": true
     }
   }
 }

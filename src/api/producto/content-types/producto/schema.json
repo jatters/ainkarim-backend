@@ -75,20 +75,6 @@
       "target": "api::variacion.variacion",
       "mappedBy": "productos"
     },
-    "wineCepa": {
-      "type": "enumeration",
-      "required": true,
-      "default": "No Aplica",
-      "enum": [
-        "No Aplica",
-        "Cabernet",
-        "Chardonnay",
-        "Malbec",
-        "Merlot",
-        "Syrah",
-        "Pinot Noir"
-      ]
-    },
     "wineColor": {
       "type": "enumeration",
       "required": true,

@@ -18,6 +18,8 @@
     },
     "state": {
       "type": "enumeration",
+      "required": true,
+      "default": "Borrador",
       "enum": [
         "Pendiente",
         "Procesando",
@@ -28,9 +30,7 @@
         "Fallido",
         "Borrador",
         "Pago"
-      ],
-      "required": true,
-      "default": "Borrador"
+      ]
     },
     "customerName": {
       "type": "string",
@@ -125,6 +125,12 @@
       "relation": "manyToMany",
       "target": "api::reserva.reserva",
       "inversedBy": "pedidos"
+    },
+    "coupon": {
+      "type": "string"
+    },
+    "discount": {
+      "type": "integer"
     }
   }
 }

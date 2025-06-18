@@ -662,6 +662,7 @@ export interface ApiHorarioHorario extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    capacity: Schema.Attribute.Integer & Schema.Attribute.Required;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -764,6 +765,7 @@ export interface ApiPedidoPedido extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    coupon: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -782,6 +784,7 @@ export interface ApiPedidoPedido extends Struct.CollectionTypeSchema {
     customerName: Schema.Attribute.String & Schema.Attribute.Required;
     customerPhone: Schema.Attribute.String;
     customerSecondLastname: Schema.Attribute.String;
+    discount: Schema.Attribute.Integer;
     items: Schema.Attribute.JSON;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
@@ -1045,19 +1048,6 @@ export interface ApiProductoProducto extends Struct.CollectionTypeSchema {
       'manyToMany',
       'api::variacion.variacion'
     >;
-    wineCepa: Schema.Attribute.Enumeration<
-      [
-        'No Aplica',
-        'Cabernet',
-        'Chardonnay',
-        'Malbec',
-        'Merlot',
-        'Syrah',
-        'Pinot Noir',
-      ]
-    > &
-      Schema.Attribute.Required &
-      Schema.Attribute.DefaultTo<'No Aplica'>;
     wineColor: Schema.Attribute.Enumeration<
       ['No Aplica', 'Tinto', 'Blanco', 'Rosado']
     > &

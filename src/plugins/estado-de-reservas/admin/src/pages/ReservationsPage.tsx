@@ -87,6 +87,7 @@ const renderState = (state: string) => {
 const ReservationsPage = () => {
   const [sortField, setSortField] = useState<string>('reservationDate');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('asc');
+  const [sortByTime, setSortByTime] = useState<boolean>(false);
   const [reservations, setReservations] = useState<any[]>([]);
   const [filterDate, setFilterDate] = useState<Date | null>(
     new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
@@ -95,6 +96,152 @@ const ReservationsPage = () => {
   const { formatMessage } = useIntl();
   const { get, put } = useFetchClient();
   const { toggleNotification } = useNotification();
+
+  // Dentro de ReservationsPage, antes del return:
+  const renderReservationRow = (reservation: any) => {
+    const {
+      id,
+      pedidos,
+      state,
+      createdAt,
+      reservationDate,
+      customerName,
+      customerLastname,
+      customerDocument,
+      customerPhone,
+      guests,
+      plan,
+      servicios_adicionale,
+      reservationTime,
+      totalPriceReservation,
+      check_in_status,
+      documentId,
+    } = reservation;
+
+    return (
+      <Tr key={id} /* …tus estilos de hover y demás… */>
+        <Td style={{ textAlign: 'center', fontSize: '12px' }}>
+          {pedidos?.length > 0 ? `P-${pedidos[0].id}` : 'Sin pedido'}
+        </Td>
+        <Td style={{ textAlign: 'center', fontSize: '12px' }}>{renderState(state)}</Td>
+        <Td style={{ textAlign: 'center', fontSize: '12px' }}>{formatDate(createdAt)}</Td>
+        <Td style={{ textAlign: 'center', fontSize: '12px' }}>
+          {formatReservationDate(reservationDate)}
+        </Td>
+        <Td style={{ textTransform: 'uppercase', textAlign: 'center', fontSize: '12px' }}>
+          {`${customerName} ${customerLastname}`}
+        </Td>
+        <Td style={{ textAlign: 'center', fontSize: '12px' }}>{formatNumber(customerDocument)}</Td>
+        <Td style={{ textAlign: 'center', fontSize: '12px' }}>
+          {formatPhoneNumber(customerPhone)}
+        </Td>
+        <Td style={{ textAlign: 'center', fontSize: '12px' }}>{guests}</Td>
+        <Td style={{ textAlign: 'center', fontSize: '12px' }}>{plan?.name || '-'}</Td>
+        <Td style={{ textAlign: 'center', fontSize: '12px' }}>
+          {servicios_adicionale ? servicios_adicionale.name : '-'}
+        </Td>
+        <Td style={{ textAlign: 'center', fontSize: '12px' }}>
+          {formatReservationTime(reservationTime)}
+        </Td>
+        <Td style={{ textAlign: 'center', fontSize: '12px' }}>
+          {formatCurrency(totalPriceReservation)}
+        </Td>
+        <Td style={{ textAlign: 'center', fontSize: '12px' }}>
+          {state === 'Confirmada' &&
+            (check_in_status ? (
+              <Typography style={{ color: '#8BC34A' }}>Checked</Typography>
+            ) : (
+              <Button onClick={() => handleCheckIn(documentId)}>Check In</Button>
+            ))}
+        </Td>
+      </Tr>
+    );
+  };
+
+  const isGroupingByTime = sortField === 'reservationTime';
+  const renderRows = () => {
+    if (!isGroupingByTime) {
+      // comportamiento actual: lista plana
+      return reservations.map(renderReservationRow);
+    }
+
+    // a) Reagrupar por fecha y luego por plan
+    const grouped = reservations.reduce(
+      (acc, r) => {
+        const dateKey = r.reservationDate!;
+        const planKey = r.plan?.name || '–';
+        acc[dateKey] = acc[dateKey] || {};
+        acc[dateKey][planKey] = acc[dateKey][planKey] || [];
+        acc[dateKey][planKey].push(r);
+        return acc;
+      },
+      {} as Record<string, Record<string, any[]>>
+    );
+    return Object.keys(grouped)
+      .sort((a, b) => new Date(a).getTime() - new Date(b).getTime())
+      .map((dateKey) => {
+        const plans = grouped[dateKey];
+        return (
+          <React.Fragment key={`group-date-${dateKey}`}>
+            {/* Cabecera de fecha */}
+            <Tr>
+              <Td
+                colSpan={13}
+                style={{
+                  background: '#2F2F33',
+                  color: '#fff',
+                  fontWeight: 'bold',
+                  fontSize: '13px',
+                  paddingBottom: '0.5rem',
+                  paddingTop: '0.5rem',
+                  paddingLeft: '0.2rem',
+                }}
+              >
+                {formatReservationDate(dateKey)}
+              </Td>
+            </Tr>
+
+            {Object.keys(plans)
+              // opcional: ordenar planes alfabéticamente
+              .sort()
+              .map((planKey) => {
+                const rows = plans[planKey];
+                // c) Dentro de cada plan, ordenar por hora
+                rows.sort((a: any, b: any) => {
+                  const [ah, am] = a.reservationTime!.split(':').map(Number);
+                  const [bh, bm] = b.reservationTime!.split(':').map(Number);
+                  return ah * 60 + am - (bh * 60 + bm);
+                });
+
+                return (
+                  <React.Fragment key={`group-plan-${dateKey}-${planKey}`}>
+                    {/* Subcabecera de plan */}
+                    <Tr>
+                      <Td
+                        colSpan={13}
+                        style={{
+                          background: '#28282C',
+                          color: '#fff',
+                          fontStyle: 'normal',
+                          fontWeight: 'bold',
+                          fontSize: '11px',
+                          paddingLeft: '2rem',
+                          paddingBottom: '0.5rem',
+                          paddingTop: '0.5rem'
+                        }}
+                      >
+                        {planKey}
+                      </Td>
+                    </Tr>
+
+                    {rows.map(renderReservationRow)}
+                  </React.Fragment>
+                );
+              })}
+          </React.Fragment>
+        );
+      });
+  };
 
   const token = process.env.STRAPI_ADMIN_TOKEN_PLUGINS || '';
   const handleSort = (field: string) => {
@@ -137,7 +284,7 @@ const ReservationsPage = () => {
     fetchReservations();
     const intervalId = setInterval(fetchReservations, 30000); // 30000ms = 30s
     return () => clearInterval(intervalId);
-  }, [filterDate, showFuture, sortField, sortOrder]);
+  }, [filterDate, showFuture, sortField, sortOrder, sortByTime]);
 
   const handleCheckIn = async (id: string) => {
     try {
@@ -325,6 +472,24 @@ const ReservationsPage = () => {
             />
             <span style={{ fontSize: '14px' }}>Mostrar reservas futuras</span>
           </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
+            <Switch
+              checked={sortByTime}
+              onCheckedChange={(value: boolean) => {
+                setSortByTime(value);
+                if (value) {
+                  setSortField('reservationTime');
+                  setSortOrder('asc');
+                } else {
+                  setSortField('reservationDate');
+                  setSortOrder('asc');
+                }
+              }}
+              onLabel="Por horario"
+              offLabel="Por fecha"
+            />
+            <span style={{ fontSize: '14px' }}>Ordenar por horario</span>
+          </div>
           <Button onClick={fetchReservations}>Actualizar</Button>
 
           <Button onClick={handleExport}>Exportar Reservas</Button>
@@ -385,85 +550,7 @@ const ReservationsPage = () => {
               </Th>
             </Tr>
           </Thead>
-          <Tbody>
-            {reservations.map((reservation) => {
-              const {
-                id,
-                documentId,
-                reservationNumber,
-                state,
-                createdAt,
-                creationDate,
-                reservationDate,
-                customerName,
-                customerLastname,
-                customerDocument,
-                customerPhone,
-                guests,
-                plan,
-                servicios_adicionale,
-                reservationTime,
-                totalPriceReservation,
-                check_in_status,
-                pedidos,
-              } = reservation;
-
-              return (
-                <Tr
-                  key={id}
-                  style={{
-                    transition: 'background-color 0.3s',
-                  }}
-                  onMouseEnter={(e: React.MouseEvent<HTMLTableRowElement>) =>
-                    (e.currentTarget.style.backgroundColor = '#343447')
-                  }
-                  onMouseLeave={(e: React.MouseEvent<HTMLTableRowElement>) =>
-                    (e.currentTarget.style.backgroundColor = '')
-                  }
-                >
-                  {/* Numero de reserva */}
-                  {/* <Td style={{ textAlign: 'center', fontSize: '12px' }}>{reservationNumber}</Td> */}
-                  {/* Numero de pedido */}
-                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>
-                    {pedidos?.length > 0 ? `P-${pedidos?.[0].id}` : 'Sin pedido'}
-                  </Td>
-                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>{renderState(state)}</Td>
-                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>{formatDate(createdAt)}</Td>
-                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>
-                    {formatReservationDate(reservationDate)}
-                  </Td>
-                  <Td
-                    style={{ textTransform: 'uppercase', textAlign: 'center', fontSize: '12px' }}
-                  >{`${customerName} ${customerLastname}`}</Td>
-                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>
-                    {formatNumber(customerDocument)}
-                  </Td>
-                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>
-                    {formatPhoneNumber(customerPhone)}
-                  </Td>
-                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>{guests}</Td>
-                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>{plan?.name || '-'}</Td>
-                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>
-                    {servicios_adicionale ? reservation.servicios_adicionale.name : '-'}
-                  </Td>
-                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>
-                    {formatReservationTime(reservationTime)}
-                  </Td>
-                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>
-                    {formatCurrency(totalPriceReservation)}
-                  </Td>
-                  <Td style={{ textAlign: 'center', fontSize: '12px' }}>
-                    {state === 'Confirmada' &&
-                      (check_in_status ? (
-                        <Typography style={{ color: '#8BC34A' }}>Checked</Typography>
-                      ) : (
-                        <Button onClick={() => handleCheckIn(documentId)}>Check In</Button>
-                      ))}
-                  </Td>
-                </Tr>
-              );
-            })}
-          </Tbody>
+          <Tbody>{renderRows()}</Tbody>
         </Table>
       </Box>
     </Main>
