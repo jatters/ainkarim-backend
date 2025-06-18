@@ -674,7 +674,7 @@ export interface ApiHorarioHorario extends Struct.CollectionTypeSchema {
     > &
       Schema.Attribute.Private;
     name: Schema.Attribute.String & Schema.Attribute.Required;
-    planes: Schema.Attribute.Relation<'manyToMany', 'api::plan.plan'>;
+    plane: Schema.Attribute.Relation<'manyToOne', 'api::plan.plan'>;
     publishedAt: Schema.Attribute.DateTime;
     startTime: Schema.Attribute.Time & Schema.Attribute.Required;
     updatedAt: Schema.Attribute.DateTime;
@@ -855,7 +855,7 @@ export interface ApiPlanPlan extends Struct.CollectionTypeSchema {
       'api::experiencia.experiencia'
     >;
     gallery: Schema.Attribute.Media<'images', true>;
-    horarios: Schema.Attribute.Relation<'manyToMany', 'api::horario.horario'>;
+    horarios: Schema.Attribute.Relation<'oneToMany', 'api::horario.horario'>;
     image: Schema.Attribute.Media<'images'> & Schema.Attribute.Required;
     isActive: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<true>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;

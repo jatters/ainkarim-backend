@@ -76,9 +76,9 @@
     },
     "horarios": {
       "type": "relation",
-      "relation": "manyToMany",
+      "relation": "oneToMany",
       "target": "api::horario.horario",
-      "mappedBy": "planes"
+      "mappedBy": "plane"
     },
     "reservas": {
       "type": "relation",

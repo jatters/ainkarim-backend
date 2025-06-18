@@ -24,9 +24,9 @@
       "type": "time",
       "required": true
     },
-    "planes": {
+    "plane": {
       "type": "relation",
-      "relation": "manyToMany",
+      "relation": "manyToOne",
       "target": "api::plan.plan",
       "inversedBy": "horarios"
     },
