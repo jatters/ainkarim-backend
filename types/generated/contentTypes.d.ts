@@ -765,6 +765,7 @@ export interface ApiPedidoPedido extends Struct.CollectionTypeSchema {
     draftAndPublish: false;
   };
   attributes: {
+    carrierName: Schema.Attribute.String;
     coupon: Schema.Attribute.String;
     createdAt: Schema.Attribute.DateTime;
     createdBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
@@ -804,6 +805,8 @@ export interface ApiPedidoPedido extends Struct.CollectionTypeSchema {
     >;
     publishedAt: Schema.Attribute.DateTime;
     reservas: Schema.Attribute.Relation<'manyToMany', 'api::reserva.reserva'>;
+    sheetSyncedOrder: Schema.Attribute.Boolean &
+      Schema.Attribute.DefaultTo<false>;
     state: Schema.Attribute.Enumeration<
       [
         'Pendiente',
@@ -820,6 +823,7 @@ export interface ApiPedidoPedido extends Struct.CollectionTypeSchema {
       Schema.Attribute.Required &
       Schema.Attribute.DefaultTo<'Borrador'>;
     totalPriceOrder: Schema.Attribute.Integer;
+    trackingNumber: Schema.Attribute.String;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;
@@ -1244,6 +1248,7 @@ export interface ApiReservaReserva extends Struct.CollectionTypeSchema {
       'manyToOne',
       'api::additional-service.additional-service'
     >;
+    sheetSynced: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     state: Schema.Attribute.Enumeration<
       ['Pendiente', 'Confirmada', 'Cancelada', 'Pago']
     >;

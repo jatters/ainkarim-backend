@@ -13,7 +13,12 @@
     "noEmitOnError": true,
     "noImplicitThis": true,
     "outDir": "dist",
-    "rootDir": "."
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "types/*": ["types/*"],
+      "src/*": ["src/*"]
+    }
   },
   "include": [
     // Include root files

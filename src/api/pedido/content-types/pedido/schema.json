@@ -131,6 +131,16 @@
     },
     "discount": {
       "type": "integer"
+    },
+    "sheetSyncedOrder": {
+      "type": "boolean",
+      "default": false
+    },
+    "trackingNumber": {
+      "type": "string"
+    },
+    "carrierName": {
+      "type": "string"
     }
   }
 }

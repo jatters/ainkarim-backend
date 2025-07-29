@@ -1,3 +1,8 @@
+import { sendEmailBrevoWithLog } from "../../../../utils/email";
+import { errors } from "@strapi/utils";
+
+const { ApplicationError } = errors;
+
 function capitalize(str: string): string {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
@@ -37,41 +42,6 @@ function formatTime(timeString: string): string {
   return `${hour}:${minutes}${ampm}`;
 }
 
-import { errors } from "@strapi/utils";
-const { ApplicationError } = errors;
-
-async function sendEmailBrevo(toEmail, toName, subject, htmlContent) {
-  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
-    method: "POST",
-    headers: {
-      accept: "application/json",
-      "api-key": process.env.BREVO_API_KEY, // Define tu API Key en las variables de entorno
-      "content-type": "application/json",
-    },
-    body: JSON.stringify({
-      sender: {
-        name: "Viñedo Ain Karim",
-        email: "noreply@ainkarim.co",
-      },
-      to: [
-        {
-          email: toEmail,
-          name: toName,
-        },
-      ],
-      subject: subject,
-      htmlContent: htmlContent,
-    }),
-  });
-
-  if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Error enviando email: ${errorText}`);
-  }
-
-  return response.json();
-}
-
 /**
  * Interfaz del Plan (ajusta si necesitas más campos).
  */
@@ -109,6 +79,38 @@ const dayToNumber: Record<string, number> = {
   Sabado: 6,
 };
 
+async function sendEmailBrevo(toEmail, toName, subject, htmlContent) {
+  const response = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      accept: "application/json",
+      "api-key": process.env.BREVO_API_KEY, // Define tu API Key en las variables de entorno
+      "content-type": "application/json",
+    },
+    body: JSON.stringify({
+      sender: {
+        name: "Viñedo Ain Karim",
+        email: "noreply@ainkarim.co",
+      },
+      to: [
+        {
+          email: toEmail,
+          name: toName,
+        },
+      ],
+      subject: subject,
+      htmlContent: htmlContent,
+    }),
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text();
+    throw new Error(`Error enviando email: ${errorText}`);
+  }
+
+  return response.json();
+}
+
 /**
  * Crea un Date local al mediodía, para evitar que "2025-01-28"
  * se interprete como UTC y retroceda un día si tu timezone es -5, etc.
@@ -141,8 +143,7 @@ function getPlanIdentifier(planField: any): { numericId?: number } | null {
   ) {
     return { numericId: planField.set[0].id };
   }
-
-  // CASO 3: Desde la UI de Strapi con { connect: [ { id: number } ] }
+  
   if (
     typeof planField === "object" &&
     Array.isArray(planField.connect) &&
@@ -152,8 +153,6 @@ function getPlanIdentifier(planField: any): { numericId?: number } | null {
     return { numericId: planField.connect[0].id };
   }
 
-  // Si no usas "documentId" en el Plan, puedes omitir la lógica de docId
-  // y devolver null en cualquier otro caso.
   return null;
 }
 
@@ -162,13 +161,8 @@ function getPlanIdentifier(planField: any): { numericId?: number } | null {
  */
 async function validateReserva(event: any) {
   const { data } = event.params;
-  if (!data) return;
+  if (!data || !data.plan) return;
 
-  if (!data.plan) {
-    return;
-  }
-
-  // 1) Extraer identificador numérico del plan
   const planIdObj = getPlanIdentifier(data.plan);
   if (!planIdObj || !planIdObj.numericId) {
     throw new ApplicationError('No se pudo extraer ningún ID de "plan".');
@@ -311,7 +305,7 @@ export default {
     //await validateReserva(event);
 
     const { data } = event.params;
-    console.log("[DEBUG] beforeCreate - Incoming data:", data);
+    
 
     if (!data.reservationNumber) {
       console.log(
@@ -362,168 +356,13 @@ export default {
     console.log("[DEBUG] creationDate asignada:", data.creationDate);
   },
 
-  async beforeUpdate(event: any) {
-    //await validateReserva(event);
-
-    const { data } = event.params;
-    console.log("[DEBUG] beforeUpdate - Incoming data:", data);
-  },
-
-  async afterCreate(event: any) {
-    const { result } = event;
-    // Solo enviamos el correo si la reserva se crea en estado "Pendiente"
-
-    const fullReserva: any = await strapi.entityService.findOne(
-      "api::reserva.reserva",
-      result.id,
-      {
-        populate: ["plan", "servicios_adicionale"],
-      }
-    );
-    let nombrePlan = "Plan";
-    let unitPlan = "";
-    if (fullReserva.plan) {
-      if (fullReserva.plan.name) {
-        nombrePlan = fullReserva.plan.name;
-        unitPlan = fullReserva.plan.unitPlan || "";
-      } else if (fullReserva.plan.id) {
-        const planData = await strapi.entityService.findOne(
-          "api::plan.plan",
-          fullReserva.plan.id,
-          {
-            fields: ["name", "unitPlan"],
-          }
-        );
-        nombrePlan = planData?.name || "Plan";
-        unitPlan = planData?.unitPlan || "";
-      }
-    }
-    if (fullReserva.state === "Pendiente") {
-      // Datos de la reserva
-      const nombreCompleto =
-        `${fullReserva.customerName} ${fullReserva.customerMiddleName || ""} ${fullReserva.customerLastname}`.trim();
-      // Se utiliza "name" según el schema del plan
-      //const nombrePlan =         result.plan && result.plan.name ? result.plan.name : "Plan";
-      //const fechaReserva = formatDate(result.reservationDate);
-      const fechaReserva = formatReservationDate(fullReserva.reservationDate);
-      const horaReserva = formatTime(fullReserva.reservationTime);
-      //const serviciosAdicionales = result.servicios_adicionales ? result.servicios_adicionales.name : "-";
-      /* 
-      console.log(
-        "[DEBUG] servicios_adicionales:",
-        result.servicios_adicionales
-      );
-      console.log("[DEBUG] additional_services:", result.additional_services);
-      console.log("[DEBUG] result:", result); */
-      let serviciosAdicionales = "-";
-      if (
-        fullReserva.servicios_adicionale &&
-        fullReserva.servicios_adicionale.name
-      ) {
-        serviciosAdicionales = fullReserva.servicios_adicionale.name;
-      }
-      console.log("[DEBUG] plan:", nombrePlan, unitPlan);
-      const numeroPersonas = fullReserva.guests;
-      const subject = `¡Tu reserva para ${nombrePlan} está en proceso!`;
-
-      const htmlTemplate = `
-        <html>
-          <head>
-            <meta charset="UTF-8" />
-          </head>
-          <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333;">
-            <div style="max-width: 600px; width: 100%; margin: auto; padding: 20px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-              
-              <!-- Header con Logo -->
-              <div style="text-align: center; background-color: #1a1a1a; padding: 20px; border-radius: 10px 10px 0 0;">
-                <img src="https://ainkarim.co/uploads/logo_ain_karim_9987562b80.png" alt="Logo Viñedo Ain Karim" style="width: 250px; max-width: 100%; height: auto;" />
-              </div>
-              
-              <!-- Imagen Principal -->
-              <div style="text-align: center; margin: 20px 0;">
-                <img src="https://ainkarim.co/uploads/vinedo_mail_5b56f67c98.jpg" alt="Viñedo Ain Karim" style="width: 100%; max-width: 560px; height: auto; border-radius: 8px;">
-              </div>
-              
-              <!-- Mensaje Principal -->
-              <h2 style="color: #2d5339; text-align: center; font-size: 22px;">
-                ¡Tu reserva ha sido recibida!
-              </h2>
-              
-              <p style="font-size: 16px; line-height: 1.6;">
-                Hola <strong>${nombreCompleto}</strong>,
-              </p>
-              
-              <p style="font-size: 16px; line-height: 1.6;">
-                ¡Gracias por reservar tu experiencia en <strong>Viñedo Ain Karim</strong>! 🍷✨
-              </p>
-              
-              <p style="font-size: 16px; line-height: 1.6;">
-                Hemos recibido tu solicitud y estamos a la espera de la confirmación de tu pago. En cuanto se valide, recibirás un correo con la confirmación de tu reserva y las indicaciones necesarias.
-              </p>
-              
-              <!-- Información de la Reserva -->
-              <div style="background-color: #f8f4e3; padding: 15px 20px; border-radius: 5px; margin-top: 20px;">
-                <p style="font-size: 16px; font-weight: 700; text-align: center; color: #2d5339;">Información de tu reserva:</p>
-                <p><strong>📅 Fecha:</strong> ${fechaReserva}</p>
-                <p><strong>⏰ Hora:</strong> ${horaReserva}</p>
-                <p><strong>👥 Número de invitados:</strong> ${numeroPersonas} ${unitPlan}</p>
-                <p><strong>🍷 Plan:</strong> ${nombrePlan}</p>
-                ${serviciosAdicionales !== "-" ? `<p><strong>📝 Servicios adicionales:</strong> ${serviciosAdicionales}</p>` : ""}
-              </div>
-              
-              <!-- Mensaje de Confirmación de Pago -->
-              <div style="margin-top: 20px;">
-                <p style="font-size: 16px; line-height: 1.6;">
-                  Si ya realizaste el pago y aún no recibes la confirmación, no te preocupes, puede tomar unos minutos. Si necesitas ayuda, contáctanos en  
-                  <a href="mailto:visitas@marquesvl.com" style="color: #2d5339; font-weight: bold; text-decoration: none;">visitas@marquesvl.com</a>.
-                </p>
-                <p style="font-size: 16px; line-height: 1.6;">  
-                  ¡Nos emociona recibirte pronto en nuestro viñedo! 🌿  
-                </p>
-              </div>
-              
-              <!-- Despedida -->
-              <p style="font-size: 16px; margin-top: 30px;">
-                Saludos,<br><br>
-                <strong>Viñedo Ain Karim.</strong>
-              </p>
-              
-              <!-- Pie de Página -->
-              <p style="font-size: 12px; color: #6c757d; text-align: center; margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px;">
-                Este mensaje fue enviado automáticamente desde la web de  
-                <a href="https://ainkarim.co" style="color: #2d5339; text-decoration: none; font-weight: bold;">Ainkarim.co</a>
-              </p>
-            
-            </div>
-          </body>
-        </html>
-        `;
-
-      try {
-        await sendEmailBrevo(
-          result.customerEmail,
-          nombreCompleto,
-          subject,
-          htmlTemplate
-        );
-        strapi.log.info(
-          `Email enviado a ${result.customerEmail} para reserva creada.`
-        );
-      } catch (error) {
-        strapi.log.error(
-          `Error enviando email a ${result.customerEmail}: ${error}`
-        );
-      }
-    }
-  },
-
   async afterUpdate(event: any) {
-    const { result, params } = event;
-    // Se dispara el envío de correo cuando se actualiza el estado
-    if (params.data && params.data.state) {
-      const newState = params.data.state;
+    const { result, params, previous } = event;
 
-      // Reconsultar la reserva con populate para obtener relaciones completas
+    if (
+      params.data?.state === "Confirmada" &&
+      previous?.state !== "Confirmada"
+    ) {
       const fullReserva: any = await strapi.entityService.findOne(
         "api::reserva.reserva",
         result.id,
@@ -532,119 +371,20 @@ export default {
         }
       );
 
-      let nombrePlan = "Plan";
-      let unitPlan = "";
-      if (fullReserva.plan) {
-        if (fullReserva.plan.name) {
-          nombrePlan = fullReserva.plan.name;
-          unitPlan = fullReserva.plan.unitPlan || "";
-        } else if (fullReserva.plan.id) {
-          const planData = await strapi.entityService.findOne(
-            "api::plan.plan",
-            fullReserva.plan.id,
-            {
-              fields: ["name"],
-            }
-          );
-          nombrePlan = planData?.name || "Plan";
-          unitPlan = planData?.unitPlan || "";
-        }
-      }
+      const nombrePlan = fullReserva.plan?.name || "Plan";
+      const unitPlan = fullReserva.plan?.unitPlan || "";
       const nombreCompleto =
         `${fullReserva.customerName} ${fullReserva.customerMiddleName || ""} ${fullReserva.customerLastname}`.trim();
       const fechaReserva = formatReservationDate(fullReserva.reservationDate);
       const horaReserva = formatTime(fullReserva.reservationTime);
       const numeroPersonas = fullReserva.guests;
+      const serviciosAdicionales =
+        fullReserva.servicios_adicionale?.name || "-";
 
-      // Usamos el campo correcto: en el schema se llama "servicios_adicionale" (manyToOne, objeto)
-      let serviciosAdicionales = "-";
-      if (
-        fullReserva.servicios_adicionale &&
-        fullReserva.servicios_adicionale.name
-      ) {
-        serviciosAdicionales = fullReserva.servicios_adicionale.name;
-      }
+      const subject = `¡Tu reserva para ${nombrePlan} ha sido confirmada! 🍷`;
 
-      let subject = "";
-      let htmlTemplate = "";
-
-      if (newState === "Confirmada" || newState === "Pago") {
-        try {
-          // Obtiene el correo del administrador desde "El Viñedo" sin depender de un ID fijo
-          const elVinedo: any = await strapi.entityService.findOne(
-            "api::el-vinedo.el-vinedo",
-            3,
-            { fields: ["ventasEmail"] }
-          );
-          const adminEmail = elVinedo?.ventasEmail;
-          if (adminEmail) {
-            const adminSubject = `Nueva reserva confirmada - R-${result.id}`;
-            const adminHtmlTemplate = `
+      const htmlTemplate = `
               <html>
-                <head>
-                  <meta charset="UTF-8" />
-                </head>
-                <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333;">
-                  <div style="max-width: 600px; width: 100%; margin: auto; padding: 20px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-                    
-                    <!-- Header con Logo -->
-                    <div style="text-align: center; background-color: #1a1a1a; padding: 20px; border-radius: 10px 10px 0 0;">
-                      <img src="https://ainkarim.co/uploads/logo_ain_karim_9987562b80.png" alt="Logo Viñedo Ain Karim" style="width: 250px; max-width: 100%; height: auto;" />
-                    </div>
-                    
-                    <h2 style="color: #2d5339; text-align: center; font-size: 22px;">
-                      Nuevo pedido confirmado
-                    </h2>
-                    <p style="font-size: 16px; line-height: 1.6;">
-                      Se ha confirmado la reserva <strong>R-${result.id}</strong>.
-                    </p>
-  
-                    <!-- Información del cliente -->
-                    <div style="background-color: #f1f1f1; padding: 15px 20px; border-radius: 5px; margin-top: 20px;">
-                      <p style="font-size: 16px; font-weight: 700; text-align: center; color: #2d5339;">
-                        Información del cliente:
-                      </p>
-                      <p><strong>Nombre:</strong> ${nombreCompleto}</p>
-                      <p><strong>Documento:</strong> ${fullReserva.customerDocument}</p>
-                      <p><strong>Email:</strong> ${fullReserva.customerEmail}</p>                    
-                      <p><strong>Teléfono:</strong> ${fullReserva.customerPhone}</p>
-                    </div>
-                    
-                    <!-- Información de la reserva -->
-                    <div style="background-color: #f8f4e3; padding: 15px 20px; border-radius: 5px; margin-top: 20px;">
-                      <p style="font-size: 16px; font-weight: 700; text-align: center; color: #2d5339;">
-                        Información de la reserva:
-                      </p>
-                      <p><strong>Número de Reserva:</strong> R-${result.id}</p>
-                      <p><strong>Fecha:</strong> ${fechaReserva}</p>
-                      <p><strong>Hora:</strong> ${horaReserva}</p>
-                      <p><strong>Número de invitados:</strong> ${numeroPersonas} ${unitPlan}s</p>
-                      <p><strong>Plan:</strong> ${nombrePlan}</p>
-                      ${serviciosAdicionales !== "-" ? `<p><strong>Servicios adicionales:</strong> ${serviciosAdicionales}</p>` : ""}
-                    </div>
-                    
-                    <!-- Pie de Página -->
-                    <p style="font-size: 12px; color: #6c757d; text-align: center; margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px;">
-                      Este mensaje fue enviado automáticamente desde la web de 
-                      <a href="https://ainkarim.co" style="color: #2d5339; text-decoration: none; font-weight: bold;">Ainkarim.co</a>
-                    </p>
-                  </div>
-                </body>
-              </html>
-            `;
-            try {
-              await sendEmailBrevo(adminEmail, "Administrador", adminSubject, adminHtmlTemplate);
-              strapi.log.info(`Correo de aviso enviado al administrador (${adminEmail}) por pedido ${result.id}.`);
-            } catch (error) {
-              strapi.log.error(`Error enviando correo al administrador (${adminEmail}): ${error}`);
-            }
-          }
-        } catch (error) {
-          strapi.log.error(`Error enviando correo al administrador: ${error}`);
-        }
-        subject = `Reserva Confirmada para ${nombrePlan}`;
-        htmlTemplate = `
-          <html>
             <head>
               <meta charset="UTF-8" />
             </head>
@@ -719,179 +459,90 @@ export default {
             </body>
           </html>
           `;
-      } else if (newState === "Cancelada") {
-        subject = `Reserva no agendada para ${nombrePlan}`;
-        htmlTemplate = `
-          <html>
-            <head>
-              <meta charset="UTF-8" />
-            </head>
-            <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333;">
-              <div style="max-width: 600px; width: 100%; margin: auto; padding: 20px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-                
-                <!-- Encabezado con Logo -->
-                <div style="text-align: center; background-color: #1a1a1a; padding: 20px; border-radius: 10px 10px 0 0;">
-                  <img src="https://ainkarim.co/uploads/logo_ain_karim_9987562b80.png" alt="Logo Viñedo Ain Karim" style="width: 250px; max-width: 100%; height: auto;" />
-                </div>
-                
-                <!-- Imagen Principal -->
-                <div style="text-align: center; margin: 20px 0;">
-                  <img src="https://ainkarim.co/uploads/vinedo_e0e861760e.webp" alt="Viñedo Ain Karim" style="width: 100%; max-width: 560px; height: auto; border-radius: 8px;">
-                </div>
-                
-                <h2 style="color: #b22222; text-align: center; font-size: 22px;">❌ Tu reserva no pudo ser confirmada</h2>              
-            
-                <p style="font-size: 16px; line-height: 1.6;">
-                  Hola <strong>${nombreCompleto}</strong>,
-                </p>
-
-                <p style="font-size: 16px; line-height: 1.6;">
-                  Lamentamos informarte que tu reserva en <strong>Viñedo Ain Karim</strong> no pudo completarse debido a un problema con el pago.  
-                </p>
-
-                <p style="font-size: 16px; line-height: 1.6;">
-                  Si el cargo fue realizado y aún no has recibido confirmación, por favor contáctanos lo antes posible para revisar tu caso. También puedes intentar hacer una nueva reserva en nuestra página web.
-                </p>
-
-                <!-- Información de la Reserva -->
-                <div style="background-color: #ffe6e6; padding: 15px 20px; border-radius: 5px; margin-top: 20px;">
-                  <p style="font-size: 16px; font-weight: 700; text-align: center; color: #b22222;">Detalles de tu reserva fallida:</p>
-                  <p><strong>📅 Fecha:</strong> ${fechaReserva}</p>
-                  <p><strong>⏰ Hora:</strong> ${horaReserva}</p>
-                  <p><strong>👥 Número de invitados:</strong> ${numeroPersonas} ${unitPlan}s</p>
-                  <p><strong>🍷 Plan:</strong> ${nombrePlan}</p>
-                </div>
-                
-                <!-- Contacto y Reintento -->
-                <div style="margin-top: 20px;">
-                  <p style="font-size: 16px; line-height: 1.6;">
-                    Si necesitas ayuda, escríbenos a  
-                    <a href="mailto:visitas@marquesvl.com" style="color: #b22222; font-weight: bold; text-decoration: none;">visitas@marquesvl.com</a>.
-                  </p>
-                </div>
-
-                <!-- Botón de nueva reserva -->
-                <div style="text-align: center; margin-top: 20px;">
-                  <a href="https://ainkarim.co/reservas" style="background-color: #b22222; color: #fff; padding: 12px 20px; border-radius: 5px; text-decoration: none; font-size: 16px; font-weight: bold; display: inline-block;">
-                    Intentar nueva reserva
-                  </a>
-                </div>
-                
-                <!-- Firma -->
-                <p style="font-size: 16px; text-align: center; margin-top: 30px;">
-                  Esperamos verte pronto en nuestro viñedo.
-                </p>
-                <p style="font-size: 16px; text-align: center; color: #b22222; font-weight: bold;">
-                  Equipo Viñedo Ain Karim
-                </p>
-                
-                <!-- Pie de Página -->
-                <p style="font-size: 12px; color: #6c757d; text-align: center; margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px;">
-                  Este mensaje fue enviado automáticamente desde la web de 
-                  <a href="https://ainkarim.co" style="color: #2d5339; text-decoration: none; font-weight: bold;">Ainkarim.co</a>
-                </p>
-              
-              </div>
-            </body>
-          </html>
-          `;
-      } else if (newState === "Fallida") {
-        subject = `Reserva Fallida para ${nombrePlan}`;
-        htmlTemplate = `
-          <html>
-            <head>
-              <meta charset="UTF-8" />
-            </head>
-            <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333;">
-              <div style="max-width: 600px; width: 100%; margin: auto; padding: 20px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
-                
-                <!-- Encabezado con Logo -->
-                <div style="text-align: center; background-color: #1a1a1a; padding: 20px; border-radius: 10px 10px 0 0;">
-                  <img src="https://ainkarim.co/uploads/logo_ain_karim_9987562b80.png" alt="Logo Viñedo Ain Karim" style="width: 250px; max-width: 100%; height: auto;" />
-                </div>
-                
-                <!-- Imagen Principal -->
-                <div style="text-align: center; margin: 20px 0;">
-                  <img src="https://ainkarim.co/uploads/vinedo_e0e861760e.webp" alt="Viñedo Ain Karim" style="width: 100%; max-width: 560px; height: auto; border-radius: 8px;">
-                </div>
-                
-                <h2 style="color: #b22222; text-align: center; font-size: 22px;">❌ Tu reserva no pudo ser confirmada</h2>              
-            
-                <p style="font-size: 16px; line-height: 1.6;">
-                  Hola <strong>${nombreCompleto}</strong>,
-                </p>
-
-                <p style="font-size: 16px; line-height: 1.6;">
-                  Lamentamos informarte que tu reserva en <strong>Viñedo Ain Karim</strong> no pudo completarse debido a un problema con el pago.  
-                </p>
-
-                <p style="font-size: 16px; line-height: 1.6;">
-                  Si el cargo fue realizado y aún no has recibido confirmación, por favor contáctanos lo antes posible para revisar tu caso. También puedes intentar hacer una nueva reserva en nuestra página web.
-                </p>
-
-                <!-- Información de la Reserva -->
-                <div style="background-color: #ffe6e6; padding: 15px 20px; border-radius: 5px; margin-top: 20px;">
-                  <p style="font-size: 16px; font-weight: 700; text-align: center; color: #b22222;">Detalles de tu reserva fallida:</p>
-                  <p><strong>📅 Fecha:</strong> ${fechaReserva}</p>
-                  <p><strong>⏰ Hora:</strong> ${horaReserva}</p>
-                  <p><strong>👥 Número de invitados:</strong> ${numeroPersonas}</p>
-                  <p><strong>🍷 Plan:</strong> ${nombrePlan}</p>
-                </div>
-                
-                <!-- Contacto y Reintento -->
-                <div style="margin-top: 20px;">
-                  <p style="font-size: 16px; line-height: 1.6;">
-                    Si necesitas ayuda, escríbenos a  
-                    <a href="mailto:visitas@marquesvl.com" style="color: #b22222; font-weight: bold; text-decoration: none;">visitas@marquesvl.com</a>.
-                  </p>
-                </div>
-
-                <!-- Botón de nueva reserva -->
-                <div style="text-align: center; margin-top: 20px;">
-                  <a href="https://ainkarim.co/reservas" style="background-color: #b22222; color: #fff; padding: 12px 20px; border-radius: 5px; text-decoration: none; font-size: 16px; font-weight: bold; display: inline-block;">
-                    Intentar nueva reserva
-                  </a>
-                </div>
-                
-                <!-- Firma -->
-                <p style="font-size: 16px; text-align: center; margin-top: 30px;">
-                  Esperamos verte pronto en nuestro viñedo.
-                </p>
-                <p style="font-size: 16px; text-align: center; color: #b22222; font-weight: bold;">
-                  Equipo Viñedo Ain Karim
-                </p>
-                
-                <!-- Pie de Página -->
-                <p style="font-size: 12px; color: #6c757d; text-align: center; margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px;">
-                  Este mensaje fue enviado automáticamente desde la web de 
-                  <a href="https://ainkarim.co" style="color: #2d5339; text-decoration: none; font-weight: bold;">Ainkarim.co</a>
-                </p>
-              
-              </div>
-            </body>
-          </html>
-          `;
-      } else {
-        
-        return;
-      }
-
       try {
-        await sendEmailBrevo(
+        await sendEmailBrevoWithLog(
           result.customerEmail,
           nombreCompleto,
           subject,
           htmlTemplate
         );
         strapi.log.info(
-          `Email enviado a ${result.customerEmail} para reserva actualizada a estado ${newState}.`
+          `[EMAIL] Enviado correo de confirmación de pago a ${result.customerEmail}`
         );
       } catch (error) {
         strapi.log.error(
-          `Error enviando email a ${result.customerEmail}: ${error}`
+          `[EMAIL] Error enviando correo a ${result.customerEmail}: ${error}`
+        );
+      }
+
+      const elVinedo: any = await strapi.entityService.findOne(
+        "api::el-vinedo.el-vinedo",
+        3,
+        { fields: ["ventasEmail"] }
+      );
+
+      if (elVinedo?.ventasEmail) {
+        const adminSubject = `Nueva reserva confirmada - R-${result.id}`;
+        const adminTemplate = `
+              <html>
+                <head>
+                  <meta charset="UTF-8" />
+                </head>
+                <body style="font-family: Arial, sans-serif; margin: 0; padding: 0; background-color: #f4f4f4; color: #333;">
+                  <div style="max-width: 600px; width: 100%; margin: auto; padding: 20px; background-color: #ffffff; border-radius: 10px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);">
+                    
+                    <!-- Header con Logo -->
+                    <div style="text-align: center; background-color: #1a1a1a; padding: 20px; border-radius: 10px 10px 0 0;">
+                      <img src="https://ainkarim.co/uploads/logo_ain_karim_9987562b80.png" alt="Logo Viñedo Ain Karim" style="width: 250px; max-width: 100%; height: auto;" />
+                    </div>
+                    
+                    <h2 style="color: #2d5339; text-align: center; font-size: 22px;">
+                      Nuevo pedido confirmado
+                    </h2>
+                    <p style="font-size: 16px; line-height: 1.6;">
+                      Se ha confirmado la reserva <strong>R-${result.id}</strong>.
+                    </p>
+  
+                    <!-- Información del cliente -->
+                    <div style="background-color: #f1f1f1; padding: 15px 20px; border-radius: 5px; margin-top: 20px;">
+                      <p style="font-size: 16px; font-weight: 700; text-align: center; color: #2d5339;">
+                        Información del cliente:
+                      </p>
+                      <p><strong>Nombre:</strong> ${nombreCompleto}</p>
+                      <p><strong>Documento:</strong> ${fullReserva.customerDocument}</p>
+                      <p><strong>Email:</strong> ${fullReserva.customerEmail}</p>                    
+                      <p><strong>Teléfono:</strong> ${fullReserva.customerPhone}</p>
+                    </div>
+                    
+                    <!-- Información de la reserva -->
+                    <div style="background-color: #f8f4e3; padding: 15px 20px; border-radius: 5px; margin-top: 20px;">
+                      <p style="font-size: 16px; font-weight: 700; text-align: center; color: #2d5339;">
+                        Información de la reserva:
+                      </p>
+                      <p><strong>Número de Reserva:</strong> R-${result.id}</p>
+                      <p><strong>Fecha:</strong> ${fechaReserva}</p>
+                      <p><strong>Hora:</strong> ${horaReserva}</p>
+                      <p><strong>Número de invitados:</strong> ${numeroPersonas} ${unitPlan}s</p>
+                      <p><strong>Plan:</strong> ${nombrePlan}</p>
+                      ${serviciosAdicionales !== "-" ? `<p><strong>Servicios adicionales:</strong> ${serviciosAdicionales}</p>` : ""}
+                    </div>
+                    
+                    <!-- Pie de Página -->
+                    <p style="font-size: 12px; color: #6c757d; text-align: center; margin-top: 20px; border-top: 1px solid #ddd; padding-top: 15px;">
+                      Este mensaje fue enviado automáticamente desde la web de 
+                      <a href="https://ainkarim.co" style="color: #2d5339; text-decoration: none; font-weight: bold;">Ainkarim.co</a>
+                    </p>
+                  </div>
+                </body>
+              </html>
+            `;
+        await sendEmailBrevoWithLog(
+          elVinedo.ventasEmail,
+          "Administrador",
+          adminSubject,
+          adminTemplate
         );
       }
     }
-    
   },
 };

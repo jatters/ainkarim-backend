@@ -25,17 +25,41 @@
     },
     "isActive": {
       "type": "boolean",
-      "default": true,
-      "required": true
+      "required": true,
+      "default": true
     },
     "percent": {
       "type": "integer",
-      "max": 100,
+      "required": true,
       "min": 0,
-      "required": true
+      "max": 100
     },
     "description": {
       "type": "text"
+    },
+    "appliesTo": {
+      "type": "enumeration",
+      "required": true,
+      "enum": [
+        "Valor total del carrito",
+        "Reservas",
+        "Productos"
+      ]
+    },
+    "products": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::producto.producto",
+      "conditions": {
+        "visible": {
+          "==": [
+            {
+              "var": "appliesTo"
+            },
+            "Productos"
+          ]
+        }
+      }
     }
   }
 }

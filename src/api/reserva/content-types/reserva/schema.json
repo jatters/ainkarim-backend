@@ -125,6 +125,10 @@
       "relation": "manyToMany",
       "target": "api::pedido.pedido",
       "mappedBy": "reservas"
+    },
+    "sheetSynced": {
+      "type": "boolean",
+      "default": false
     }
   }
 }

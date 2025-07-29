@@ -19,6 +19,10 @@ export interface CouponCoupon extends Struct.ComponentSchema {
     icon: 'priceTag';
   };
   attributes: {
+    appliesTo: Schema.Attribute.Enumeration<
+      ['Valor total del carrito', 'Reservas', 'Productos']
+    > &
+      Schema.Attribute.Required;
     code: Schema.Attribute.String & Schema.Attribute.Required;
     description: Schema.Attribute.Text;
     endDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
@@ -35,6 +39,7 @@ export interface CouponCoupon extends Struct.ComponentSchema {
         },
         number
       >;
+    products: Schema.Attribute.Relation<'oneToMany', 'api::producto.producto'>;
     startDate: Schema.Attribute.DateTime & Schema.Attribute.Required;
   };
 }
