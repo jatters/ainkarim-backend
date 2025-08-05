@@ -130,7 +130,7 @@ export default {
         const orders = (await strapi.entityService.findMany(
           "api::pedido.pedido",
           {
-            filters: { sheetSyncedOrder: false, state: { $in: ["Completado", "Cancelado"] } },
+            filters: { sheetSyncedOrder: false, state: { $in: ["Pago", "Cancelado"] } },
             populate: { reservas: { fields: ["id"] } },
           }
         )) as any[];
