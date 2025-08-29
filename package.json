@@ -5,32 +5,33 @@
   "description": "Ainkarim Manager",
   "scripts": {
     "build": "strapi build",
+    "console": "strapi console",
     "deploy": "strapi deploy",
+    "dev": "strapi develop",
     "develop": "strapi develop",
     "start": "strapi start",
-    "strapi": "strapi"
+    "strapi": "strapi",
+    "upgrade": "npx @strapi/upgrade latest",
+    "upgrade:dry": "npx @strapi/upgrade latest --dry"
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
-    "@mui/icons-material": "^6.4.1",
-    "@mui/material": "^6.4.1",
     "@strapi/design-system": "^2.0.0-rc.18",
     "@strapi/helper-plugin": "^4.25.12",
-    "@strapi/plugin-cloud": "5.22.0",
-    "@strapi/plugin-users-permissions": "5.22.0",
-    "@strapi/provider-email-sendgrid": "^5.9.0",
-    "@strapi/strapi": "5.22.0",
+    "@strapi/plugin-cloud": "5.23.1",
+    "@strapi/plugin-users-permissions": "5.23.1",
+    "@strapi/strapi": "5.23.1",
     "estado-de-reservas": "link:.yalc/estado-de-reservas",
-    "googleapis": "^152.0.0",
-    "mysql2": "3.9.4",
+    "googleapis": "^156.0.0",
+    "mysql2": "3.9.8",
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-router-dom": "^6.0.0",
     "reservas-libres": "link:.yalc/reservas-libres",
     "sharp": "^0.33.5",
     "strapi-provider-email-brevo": "^1.0.4",
-    "styled-components": "^6.0.0"
+    "styled-components": "^6.1.19"
   },
   "devDependencies": {
     "@types/node": "^20",

@@ -33,7 +33,7 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.29.0",
-    "styled-components": "^6.1.15"
+    "styled-components": "^6.1.19"
   },
   "strapi": {
     "kind": "plugin",
