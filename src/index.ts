@@ -11,10 +11,9 @@ export default {
     strapi.db.lifecycles.subscribe({
       models: ['plugin::users-permissions.user'],
       async afterUpdate(event) {
-        const { result, params } = event;
-        
+        const { result, params } = event;        
         // dont send email if user is confirmed or if there's no first name
-        if (!result.confirmed && result.firstName) {
+        if (!result.confirmed && result.firstName  && result.role.name === 'Public') {
           const nombreCompleto = `${result.firstName}`;
           
           try {

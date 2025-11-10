@@ -11,6 +11,7 @@
   "options": {
     "draftAndPublish": false
   },
+  "pluginOptions": {},
   "attributes": {
     "username": {
       "type": "string",
@@ -110,13 +111,13 @@
     },
     "documentType": {
       "type": "enumeration",
+      "required": true,
       "enum": [
         "Cédula",
         "Cédula de extranjería",
         "Pasaporte",
         "NIT"
-      ],
-      "required": true
+      ]
     },
     "bornDate": {
       "type": "date"
@@ -127,6 +128,48 @@
         "Masculino",
         "Femenino",
         "Otro"
+      ]
+    },
+    "AgencyName": {
+      "type": "string"
+    },
+    "AgencyTourismCode": {
+      "type": "string"
+    },
+    "AgencyTourismCodeExpiration": {
+      "type": "date"
+    },
+    "terms": {
+      "type": "boolean"
+    },
+    "authorizedDiscount": {
+      "type": "integer",
+      "required": false,
+      "default": 0,
+      "max": 100
+    },
+    "AgencyRUT": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "AgencyCommerce": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files"
+      ]
+    },
+    "AgencyTourismRegister": {
+      "type": "media",
+      "multiple": false,
+      "allowedTypes": [
+        "images",
+        "files"
       ]
     }
   }

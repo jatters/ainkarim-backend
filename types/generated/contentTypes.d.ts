@@ -1852,8 +1852,22 @@ export interface PluginUsersPermissionsUser
   };
   attributes: {
     address: Schema.Attribute.String;
+    AgencyCommerce: Schema.Attribute.Media<'images' | 'files'>;
+    AgencyName: Schema.Attribute.String;
+    AgencyRUT: Schema.Attribute.Media<'images' | 'files'>;
+    AgencyTourismCode: Schema.Attribute.String;
+    AgencyTourismCodeExpiration: Schema.Attribute.Date;
+    AgencyTourismRegister: Schema.Attribute.Media<'images' | 'files'>;
     allowMarketing: Schema.Attribute.Boolean &
       Schema.Attribute.DefaultTo<false>;
+    authorizedDiscount: Schema.Attribute.Integer &
+      Schema.Attribute.SetMinMax<
+        {
+          max: 100;
+        },
+        number
+      > &
+      Schema.Attribute.DefaultTo<0>;
     blocked: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     bornDate: Schema.Attribute.Date;
     city: Schema.Attribute.String;
@@ -1899,6 +1913,7 @@ export interface PluginUsersPermissionsUser
       'plugin::users-permissions.role'
     >;
     secondLastName: Schema.Attribute.String;
+    terms: Schema.Attribute.Boolean;
     updatedAt: Schema.Attribute.DateTime;
     updatedBy: Schema.Attribute.Relation<'oneToOne', 'admin::user'> &
       Schema.Attribute.Private;

@@ -156,7 +156,7 @@ const FreeSpacesPage = () => {
     try {
       // Por simplicidad, traemos "todo" con un pageSize grande,
       // y luego filtramos en el front.
-      const url = '/api/planes?populate[0]=horarios&populate[1]=reservas&pagination[pageSize]=1000';
+      const url = '/api/planes?filters[isActive][$eq]=true&populate[0]=horarios&populate[1]=reservas&pagination[pageSize]=1000';
 
       const { data: json } = await get(url, {
         headers: { Authorization: `Bearer ${token}` },
