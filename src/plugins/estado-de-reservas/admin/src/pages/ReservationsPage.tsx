@@ -131,7 +131,12 @@ const ReservationsPage = () => {
         <Td style={{ textTransform: 'uppercase', textAlign: 'center', fontSize: '12px' }}>
           {`${customerName} ${customerLastname}`}
         </Td>
-        <Td style={{ textAlign: 'center', fontSize: '12px' }}>{formatNumber(customerDocument)}</Td>
+        <Td style={{ textAlign: 'center', fontSize: '12px' }}>
+          {' '}
+          {reservation.customerDocumentType === 'Cédula'
+            ? formatNumber(customerDocument)
+            : customerDocument}
+        </Td>
         <Td style={{ textAlign: 'center', fontSize: '12px' }}>
           {formatPhoneNumber(customerPhone)}
         </Td>
@@ -227,7 +232,7 @@ const ReservationsPage = () => {
                           fontSize: '11px',
                           paddingLeft: '2rem',
                           paddingBottom: '0.5rem',
-                          paddingTop: '0.5rem'
+                          paddingTop: '0.5rem',
                         }}
                       >
                         {planKey}
@@ -523,7 +528,7 @@ const ReservationsPage = () => {
                 <span style={{ margin: 'auto', display: 'block', fontSize: '12px' }}>CLIENTE</span>
               </Th>
               <Th style={{ textAlign: 'center' }}>
-                <span style={{ margin: 'auto', display: 'block', fontSize: '12px' }}>CEDULA</span>
+                <span style={{ margin: 'auto', display: 'block', fontSize: '12px' }}>DOCUMENTO</span>
               </Th>
               <Th style={{ textAlign: 'center' }}>
                 <span style={{ margin: 'auto', display: 'block', fontSize: '12px' }}>CELULAR</span>

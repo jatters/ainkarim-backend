@@ -1284,6 +1284,7 @@ export interface ApiReservaReserva extends Struct.CollectionTypeSchema {
     customerPhone: Schema.Attribute.String;
     customerSecondLastname: Schema.Attribute.String;
     guests: Schema.Attribute.Integer & Schema.Attribute.Required;
+    isAgency: Schema.Attribute.Boolean & Schema.Attribute.DefaultTo<false>;
     locale: Schema.Attribute.String & Schema.Attribute.Private;
     localizations: Schema.Attribute.Relation<
       'oneToMany',

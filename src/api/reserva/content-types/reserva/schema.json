@@ -129,6 +129,10 @@
     "sheetSynced": {
       "type": "boolean",
       "default": false
+    },
+    "isAgency": {
+      "type": "boolean",
+      "default": false
     }
   }
 }
