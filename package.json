@@ -18,10 +18,10 @@
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.0",
     "@strapi/design-system": "^2.0.0-rc.18",
-    "@strapi/helper-plugin": "^4.25.12",
-    "@strapi/plugin-cloud": "5.31.2",
-    "@strapi/plugin-users-permissions": "5.31.2",
-    "@strapi/strapi": "5.31.2",
+    "@strapi/helper-plugin": "^4.25.23",
+    "@strapi/plugin-cloud": "5.31.3",
+    "@strapi/plugin-users-permissions": "5.31.3",
+    "@strapi/strapi": "5.31.3",
     "estado-de-reservas": "link:.yalc/estado-de-reservas",
     "googleapis": "^156.0.0",
     "mysql2": "3.9.8",
@@ -40,7 +40,7 @@
     "typescript": "^5"
   },
   "engines": {
-    "node": ">=18.0.0 <=20.x.x",
+    "node": ">=18.0.0 <=22.x.x",
     "npm": ">=6.0.0"
   },
   "strapi": {
